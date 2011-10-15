@@ -1,1 +1,0 @@
-{ "email": "", "name": "sam", "role": "designer", "picture": "http://th08.deviantart.net/fs71/PRE/i/2010/296/d/a/annoyingprat_avatar_icon_by_annoyingprat-d31c9pm.jpg" }

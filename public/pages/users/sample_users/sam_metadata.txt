@@ -1,4 +1,0 @@
---- 
-format: user
-user: admin
-update: 2011-10-15 16:07:13.104173 +02:00

@@ -1,4 +1,0 @@
---- 
-format: bo/profile
-user: admin
-update: 2011-03-30 09:02:04.267004 -07:00
