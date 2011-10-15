@@ -71,14 +71,14 @@ Also clone the /users/private/admin page and change the password within it.
 Warnings
 ========
 
-//Warning: You need your own API key in order to use the Google Loader. In the example below, replace "INSERT-YOUR-KEY" with your own key. Without your own key, these examples won't work.
+//Warning: You need your own API key in order to use the Google image Loader. In the syn-imagenote nugget, replace "INSERT-YOUR-KEY" with your own key. Without your own key, this example won't work.
 
 load_javascript("https://www.google.com/jsapi?key=INSERT-YOUR-KEY",function(){});
 
 Bugs
 ====
 
-1) when you create syn-image note, <<datapage_name as syn-imagenote>>, the data page is automated created yet without any content. You need to manually open it and add curly brackets {} in the data page. Otherwise, you won’t be able to save any data. 
+1) when you create syn-image note, \<\<datapage_name as syn-imagenote\>\>, the data page is automated created yet without any content. You need to manually open it and add curly brackets {} in the data page. Otherwise, you won’t be able to save any data. 
 
 2) the 'allow' nugget is not fully functional 
 
