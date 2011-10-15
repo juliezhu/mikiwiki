@@ -1,0 +1,64 @@
+load_javascript("http://node-radiovis.googlecode.com/svn-history/r2/trunk/node-radiovis/js/jquery.editable-1.3.3.min.js",function(){
+  
+  var button = nugget.data()[0];
+  
+  if(button==null){
+    nugget.out( '<div id="bo_button"><div class="editable">Click to Edit</div></div>' );          
+  }
+  else{
+    nugget.out( '<div id="bo_button"><div class="editable">'+button.text+'</div></div>' );          
+  }
+  nugget.setHTML();
+  
+  nugget.$( "#bo_button" ).css({
+    'background-color':'#eee',
+    'border':'1 solid #eee',
+    'text-align':'center',
+    'padding':'2px',
+    'width':'100px',
+    '-moz-border-radius': '5px',
+    '-webkit-border-radius': '5px',
+    '-khtml-border-radius': '5px'
+  });
+  
+  nugget.$( "#bo_button").
+    css("width",button.width).
+    css("height",button.height).
+    css("left",button.x).
+    css("top",button.y);
+  
+  nugget.$( "#bo_button").draggable().resizable();
+  
+  nugget.$('.editable').mouseenter(function(){
+    $( "#bo_button" ).css({'background-color':'#00bbff'});
+  }).mouseout(function(){
+    $( "#bo_button" ).css({'background-color':'#eee'});
+  });
+  
+  
+  nugget.$(".editable").editable({                   
+    submit:'save',
+    cancel:'cancel',
+    onSubmit:end
+  }); 
+  
+  function end(content){
+    this; //this is the current jQuery object
+    alert(content.current+':'+content.previous);
+    
+    var all = [];
+    
+    nugget.$("#bo_button").each(function(index){
+      all[index] = {
+        "height": $(this).css('height'), 
+        "width":$(this).css('width'), 
+        "x":$(this).css("left"), 
+        "y":$(this).css("top"), 
+        "text": content.current
+      };
+    });
+    
+    nugget.updateJSON( all );
+  } 
+  
+});

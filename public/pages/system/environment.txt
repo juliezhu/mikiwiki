@@ -1,0 +1,9 @@
+* System  
+  
+<div style="background-color: #f55">  
+** This is a SYSTEM Area. You can break the system here
+</div>
+  
+<script>
+  $('.pagebody').css('border','20px solid #f55');
+</script><div><<allow:all+readonly>></div><div><br></div>

@@ -1,0 +1,5 @@
+var parentname = nugget.envelopes().attr('pagename');
+var parent = Page(parentname);
+parent.loadMetadata(function(metadata){
+   nugget.setHTML('last changed by '+(metadata.user ? metadata.user : 'unknown')+' on '+metadata.update);
+});

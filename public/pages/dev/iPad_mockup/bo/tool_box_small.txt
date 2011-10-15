@@ -1,0 +1,31 @@
+var button_names = nugget.data();
+nugget.setHTML("<div id='toolbox'/>");
+
+for (var i=0; i<button_names.length; i++){
+  var image = $('<img/>').attr('src','/pages/BabyDinosaur/icons/'+button_names[i])
+              .css({
+                width:'50px',
+                margin: '0px',
+                border: '0px',
+                zIndex: 1000
+              }); 
+
+  nugget.$('#toolbox').append(
+          $('<div/>')
+          .css({
+            height:'50px',
+            border:'1px solid #444',
+            float:'left',
+            'margin':'5px',
+            overflow:'hidden',
+            zIndex: 100
+          }).append(image)
+          .draggable({cursor: 'pointer'},{helper: "clone"})
+  );
+  
+} 
+
+nugget.$('#toolbox').css({
+  width: '150px',
+  height: '600px'
+});

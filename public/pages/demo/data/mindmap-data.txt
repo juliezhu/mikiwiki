@@ -1,0 +1,11 @@
+{
+  "nodes": [
+    "WireIt", 
+    "librairies", "inputEx", "YUI", "excanvas", 
+    "classes", "Wire", "Terminal", "Container", "Layer", "WiringEditor"
+  ],
+  "wires":[ 
+    [0,1], [1,2], [1,3], [2,3], [1,4],
+    [0,5], [5,6], [5,7], [5,8], [5,9], [5,10]
+  ]
+}   

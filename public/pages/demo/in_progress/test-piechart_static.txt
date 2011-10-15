@@ -1,0 +1,1 @@
+<<in_progress/piechart_static:{"data":[55, 20, 13, 32, 5, 1, 2, 10],"title":"my chart"}>>

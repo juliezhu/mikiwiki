@@ -1,0 +1,9 @@
+var data = nugget.data();
+
+Page(data.url).lookup(function(resolved_path){
+  nugget.out('<a href="/'+ resolved_path +'">');
+  nugget.out( data.text ? data.text : data.url  );
+  nugget.out('</a>');
+  
+  nugget.setHTML();
+});

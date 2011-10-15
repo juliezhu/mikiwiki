@@ -1,0 +1,136 @@
+var stickynotes = nugget.data();
+
+$('.ui-resizable-se').css('bottom','17px');
+
+var name_of_pagenote = 'notes-'+nugget.uniquename();
+
+nugget.out( "<a href='#' id='savestickynotes'>Save Panels</a> " );
+nugget.out( "<a href='#' id='add-tag'>Add a Panel</a> " );
+nugget.out( "<div id='"+name_of_pagenote+"'></div>" );
+nugget.setHTML();
+
+function render_page(pagename,note){
+  var pagecontent = "<"+"<"+pagename+">"+">";
+  
+  Page('explode').load({body:pagecontent,context:nugget.topenvelopePagename()},function(content){
+    note.find('.loadedpage').remove();
+    note.append("<div class='loadedpage'>"+content+"</div>");
+  });
+}
+
+/* ======= NOTE STRUCTURE ========
+   div.stickynote#stickynote-3         << draggable, resizable
+     div.handle
+       span THIS-IS-THE-TITLE
+       a.delete-icon [X]
+     input THIS-IS-THE-TITLE
+     div.loadedpage CONTENT-GOES-HERE
+   ===============================
+*/
+
+function addNote(obj){
+  var i = nugget.$("#"+name_of_pagenote+" .stickynote").size(); // get next available id
+  var mypage = obj.url; 
+  
+  var note = nugget.$("<div id='stickynote-"+i+"' class='stickynote'></div>");
+  var handle = nugget.$("<div class='handle'><span>"+mypage+"</span> <a class='delete-icon' href='#'>[X]</a></div>");
+  var input_text = nugget.$("<input style='width:"+obj.width+"'display:block;'/>").val(mypage);  
+
+  note.append(handle);
+  note.append(input_text);
+  
+  render_page(mypage,note); 
+  
+  note.css({
+    'background-color':'#fff',
+    "opacity":'0.9',
+    "width":obj.width,
+    "height":obj.height,
+    "position":"absolute",
+    "left":obj.x,
+    "top":obj.y,
+    "padding":"5px",
+    'border':'1px solid #ddd',
+    '-moz-border-radius':'5px',
+    '-webkit-border-radius':'5px'
+  }); 
+
+  note.find('.handle').css({
+    "font-size":"15px",
+    "padding":"5px 0 2px 0",
+    "font-weight":"bold",
+    "text-align":"center",
+    "display":'block',
+    "cursor":"move",
+    "width":obj.width,
+    "height":'30px',
+    "top":obj.y,
+    "left":obj.x,
+    'background-color':'#eee',
+    'color':'#000',
+    'border-bottom':'1px solid #eee',
+    'font-family':'Verdana'
+  });
+  
+  note.find(".loadedpage").css({
+    "width":obj.width
+  });
+
+  note.draggable({handle:'.handle'});
+  note.resizable({handles:'se', alsoResize:note.find(".loadedpage")});  
+  
+  // load note content when typing
+  note.find('input').typing({
+    start: function(){
+      var title = note.find('input').val();
+      render_page( title ,note);
+      note.find('.handle span').text( title ); 
+    }
+  });
+  
+  note.find('.handle').remove();
+  note.find('input').remove();
+  // toggle note content
+  note.find('.handle').click(function(){   
+   // note.find('.loadedpage').slideToggle("slow");  
+  });
+
+  // delete note
+  note.find('.delete-icon').click(function(e){
+    note.remove();
+//    $(e.target).parents('.stickynote').remove();
+  });
+
+  $('#'+name_of_pagenote).append( note ); 
+}
+
+// Loading the stickynotes on the canvas
+
+for(var i=0; i<stickynotes.length; i++){
+  addNote( stickynotes[i] );
+}
+
+var saveStickynotes = function(){
+  var all = [];
+  $("#"+name_of_pagenote+" .stickynote").each(function(index,note){
+    
+    all[index] = {
+      "height": $(this).css('height'), 
+      "width":$(this).css('width'), 
+      "x":$(this).css("left"), 
+      "y":$(this).css("top"), 
+      "url":$(this).find('input').val()
+    };
+  });
+  
+  nugget.updateJSON( all );
+  alert("your page panels have been saved!");
+}
+
+nugget.$('#savestickynotes').click(saveStickynotes);
+
+nugget.$('#add-tag').click(function(){
+  addNote({'width':'160px','height':'180px','text':"...", 'x':'200px','y':'200','url':'none'});
+});
+
+  

@@ -1,0 +1,24 @@
+load_css("http://miki.aqalert.net/javascript/star-rating/jquery.rating.css");
+
+load_javascript("http://jquery-star-rating-plugin.googlecode.com/svn/trunk/jquery.rating.js",function(){
+  
+  var t = nugget.data("0");
+  
+  nugget.out( '<div class="stars">' );
+  nugget.out( '   <input class="star" type="radio" name="fivestars-rating" value="1" title="Worst"/>' );
+  nugget.out( '   <input class="star" type="radio" name="fivestars-rating" value="2" title="Bad"/>' );
+  nugget.out( '   <input class="star" type="radio" name="fivestars-rating" value="3" title="OK"/>' );
+  nugget.out( '   <input class="star" type="radio" name="fivestars-rating" value="4" title="Good"/>' );
+  nugget.out( '   <input class="star" type="radio" name="fivestars-rating" value="5" title="Best"/>' );
+  nugget.out( '</div>' );
+  
+  nugget.setHTML();
+  
+  nugget.$('.star[value='+t+']').attr('checked','checked');
+  
+  nugget.$('.star').rating({
+    callback: function(value, link){
+      nugget.updateTable(value);
+    }
+  });
+});

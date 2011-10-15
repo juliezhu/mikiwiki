@@ -1,0 +1,4 @@
+var data = nugget.data();
+Page(data.url).loadContent(function(content){
+      nugget.setHTML( content );
+});

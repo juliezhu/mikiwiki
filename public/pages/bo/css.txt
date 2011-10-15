@@ -1,0 +1,2 @@
+css_url = nugget.data();
+load_css(css_url);

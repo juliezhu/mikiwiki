@@ -1,0 +1,18 @@
+var config = nugget.data();
+
+Page(config.url).loadContent(function(page_content){
+  var toggle_button = $('<span/>')
+                       .append(config.url).append(" [+]");
+
+  toggle_button.click(function(){
+    $(imported_page).toggle();
+  });
+  
+  var imported_page = $('<div/>').append(page_content)
+                                 .css('border','1px dashed #ccc')
+                                 .css('padding','10px')
+                                 .hide();
+  
+  var expansion_box = $('<div/>').append(toggle_button).append(imported_page);
+  nugget.setHTML( expansion_box );
+});

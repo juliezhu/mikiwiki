@@ -1,0 +1,4 @@
+--- 
+format: bo/vote
+user: admin
+update: 2011-10-15 20:51:16.363558 +02:00

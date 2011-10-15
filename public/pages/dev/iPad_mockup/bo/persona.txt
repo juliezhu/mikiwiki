@@ -1,0 +1,62 @@
+nugget.setHTML("<div class='persona'></div>");
+
+var d = nugget.data();
+
+character = nugget.$('.persona');
+
+character.append( 
+  $('<div id="actor"></div>') 
+  .append("<h3>"+ d.name+"</h3>" )
+  .append( $('<img/>').attr('src',d.pic).css({width:80, height:80,float:'left'}) )
+  .append( "<strong>Job: </strong>"+d.job )
+  .append( "<br/>" )
+  .append( "<strong>Age: </strong>"+d.age)
+  .append( "<br/>" )
+  .append( "<strong> Gender: </strong>"+d.gender)
+  .append( "<br/>" )
+  .append( "<strong> Education: </strong>"+d.education)
+  .append( "<br/>" )
+  .append( "<strong> Location: </strong>"+d.location )
+  .append( "<br/>" )
+  .append( "<strong> Computing experience: </strong>"+d.computing_experience )
+  .append( "<br/>" )
+);
+
+character.append( "<strong>Key needs:</strong>" );
+character.append( "<br/>" );
+for(var i=0;i<d.key_needs.length;i++){
+  character.append( d.key_needs[i].join(", "));
+  character.append( "<br/>" );
+}
+
+character.append( "<strong>Profile:</strong>" );
+character.append( "<br/>" );
+for(var i=0;i<d["Profile"].length;i++){
+  character.append( d["Profile"][i] );
+  character.append( "<br/>" );
+}
+
+character.append( "<strong>Background:</strong>" );
+character.append( "<br/>" );
+for(var i=0;i<d["Background"].length;i++){
+  character.append( d["Background"][i] );
+  character.append( "<br/>" );
+}
+
+character.append( "<strong>Attributes:</strong>" );
+character.append( "<br/>" );
+for(var i=0;i<d["Attributes"].length;i++){
+  character.append( d["Attributes"][i] );
+  character.append( "<br/>" );
+}
+
+character.css({
+  width:'300px', 
+  height:'500px',
+  padding:'10px',
+  backgroundColor: 'pink',
+  fontSize: '12px',
+  cursor:'move'
+});
+
+character.draggable();

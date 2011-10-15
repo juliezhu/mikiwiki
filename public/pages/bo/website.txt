@@ -1,0 +1,6 @@
+var page_url = nugget.data(); 
+
+nugget.out('<iframe src="'+page_url+'" width="100%" height="2500px" id="frameDemo"></iframe>');
+
+nugget.setHTML();
+

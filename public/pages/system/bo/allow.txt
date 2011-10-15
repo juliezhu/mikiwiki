@@ -1,0 +1,32 @@
+// <<allow: developer, mike, designer+readonly>>
+
+if (!nugget.isRunningInSidebar()){ 
+  var permissions = nugget.data();
+
+  var permissionsReadOnly = [];
+  var permissionsReadWrite = [];
+
+  for(var i=0; i<permissions.length; i++){
+	
+	if ( permissions[i].indexOf("+") != -1 ){
+		var parts = permissions[i].split("+");
+		if ( parts[1] == "readonly"){
+			permissionsReadOnly.push( parts[0] );
+		}
+	}else{
+		permissionsReadWrite.push( permissions[i] );
+	}
+  }
+
+  // alert("permissionsRead: "+permissionsRead.join(','));
+  // alert("permissionsWrite: "+permissionsWrite.join(','));
+
+  Page('authorize').getJSON(
+    {'readonly':permissionsReadOnly,'readwrite':permissionsReadWrite,'page':nugget.topenvelopePagename()},  
+    function(result){
+		//alert( 'done '+JSON.stringify(result) );
+    }
+  );
+}
+
+

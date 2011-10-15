@@ -1,0 +1,8 @@
+Embed here a googledoc page!! 
+
+<<in_progress/googledoc:{"url":"https://spreadsheets.google.com/ccc?key=0AgcKzWmQBIlMdGs0YXVfbGNNVF9kdmJEWEgxRkpkSGc&amp;hl=en#gid=0"}>>
+
+hallo hallo
+  
+ <<stickynotes>>
+

@@ -1,0 +1,87 @@
+function refreshHtml(nugget,list){
+              out = '';
+              for(var i=0; i<list.length; i++){
+
+                 out += "<li>" + list[i];
+                
+                 if (i!=0){
+                    out += " <a href='#' class='up' id='" +i+ "'>⇑</a> ";
+                 }
+
+                 if (i!=list.length-1) {
+                    out += " <a href='#' class='down' id='" +i+ "'>⇓</a>";
+                 }
+                                       
+                 out += " <a href='#' class='delete' title='delete item' id='" +i+ "'>x</a> ";
+                
+                 out += "</li>";
+              }
+
+              nugget.$('ul').html(out);
+
+              nugget.$('a.delete').click( function(){
+                 var idx = parseInt( $(this).attr('id') );
+                 cs.splice(  idx, 1  );
+
+                 nugget.afterUpdating = function(){
+                     refreshHtml(nugget, cs);
+                 };
+
+                 nugget.updateJSON( cs );
+                 return false;
+            });
+
+            nugget.$('a.up').click( function(){
+                var idx = parseInt( $(this).attr('id') );
+                var tmp = cs[idx];
+                cs[idx] = cs[idx-1];
+                cs[idx-1] = tmp;
+
+                 nugget.afterUpdating = function(){
+                     refreshHtml(nugget, cs);
+                 };
+
+                 nugget.updateJSON( cs );
+                 return false;
+            });
+
+            nugget.$('a.down').click( function(){
+                var idx = parseInt( $(this).attr('id') );
+                var tmp = cs[idx];
+                cs[idx] = cs[idx+1];
+                cs[idx+1] = tmp;
+
+                 nugget.afterUpdating = function(){
+                     refreshHtml(nugget, cs);
+                 };
+
+                 nugget.updateJSON( cs );
+                 return false;
+            });
+
+};
+
+var cs = nugget.data();
+
+nugget.out( "<ul>" );
+nugget.out( "</ul>" );
+
+nugget.out( "<form action='#'>" );
+nugget.out( "<input type='text' id='comment-input' />" );
+nugget.out( "<input type='submit' id='comment-submit' value='add item'/>" );
+nugget.out( "</form>" );
+
+nugget.setHTML();
+
+refreshHtml(nugget, cs);
+
+nugget.$('#comment-submit').click( function(){
+      cs[cs.length]=nugget.$('#comment-input').val();
+
+      nugget.afterUpdating = function(){
+         refreshHtml(nugget, cs);
+      };
+
+      nugget.updateJSON( cs );
+      return false;
+});

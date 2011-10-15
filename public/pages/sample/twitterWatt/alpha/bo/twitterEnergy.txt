@@ -1,0 +1,55 @@
+load_javascript("https://raw.github.com/DmitryBaranovskiy/g.raphael/master/g.bar.js",function(){ 
+
+nugget.out( '<div id="holder"></div><div id="tweets"></div><div id="holder2"></div>' );
+
+nugget.setHTML();
+
+var r = Raphael("holder");
+r.g.text(320, 20, "Wattsy!!!");
+r.g.text(320, 250, "Daily comparison of the Wh");
+
+r.g.txtattr.font = "20px 'Fontin Sans', Fontin-Sans, sans-serif";
+
+fin = function () {
+  this.flag = r.g.popup(this.bar.x, this.bar.y, this.bar.value || "0").insertBefore(this);
+}
+fout = function () {
+  this.flag.animate({opacity: 0}, 300, function () {this.remove();});
+}
+fin2 = function () {
+  var y = [], res = [];
+  for (var i = this.bars.length; i--;) {
+    y.push(this.bars[i].y);
+    res.push(this.bars[i].value || "0");
+  }
+  this.flag = r.g.popup(this.bars[0].x, Math.min.apply(Math, y), res.join(", ")).insertBefore(this);
+},
+fout2 = function () {
+  this.flag.animate({opacity: 0}, 300, function () {this.remove();});
+};
+  
+  $.getJSON(nugget.data()[0],function(data){            
+    var all_my_watts = [];
+    var all_my_Wh = [];
+    var all_pre_Wh = [];
+    var time = []
+    $.each(data, function(i,item){
+      var watts = item.text.split(' ')[2];
+      var Wh = item.text.split(' ')[4];
+      var pre_Wh = item.text.split(' ')[9];
+      all_my_watts.push( parseFloat(watts) );
+      all_my_Wh.push( parseInt(Wh) );
+      all_pre_Wh.push( parseInt(pre_Wh) );
+      $("#tweets").append("ALL MY DATA: "+item.user.created_at.split(' ')[0]);
+      time.push(item.user.created_at.split(' ')[0]);
+      
+    });
+    
+    var bar = r.g.barchart(10, 10, 600, 220, [all_my_watts]).hover(fin, fout);
+    var c = r.g.barchart(10, 250, 600, 220, [all_my_Wh, all_pre_Wh], {stacked: true, type: "soft"}).hoverColumn(fin2, fout2);
+
+  });
+
+$('#holder').css({'height':'600px'});
+
+});

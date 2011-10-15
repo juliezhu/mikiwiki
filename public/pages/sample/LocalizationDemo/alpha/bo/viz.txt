@@ -1,0 +1,9 @@
+var orders = nugget.data();
+
+
+for(var i=0; i<orders.length; i++){
+  nugget.out( orders[i][0] + "x [[include:"+orders[i][4] +"]] " + orders[i][5]+" <br/><br/>");  
+}    
+    
+nugget.setHTML();
+

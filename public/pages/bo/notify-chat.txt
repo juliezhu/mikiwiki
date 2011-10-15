@@ -1,0 +1,36 @@
+function timenow(){ 
+  return (new Date()).getTime(); 
+}
+
+var url = $.parseQuery()  
+var message = '';
+
+var pagename = nugget.topenvelopePagename();
+  
+if (url.changed == 'saved'){
+  message = 'page <a href="/'+pagename+'">/'+pagename+'</a> has just been saved'
+}else if (url.changed == 'renamed'){
+  message = 'page '+url.oldname+' has just been renamed to <a href="/' + pagename + '">/'+pagename+'</a>'
+}else if (url.changed == 'deleted'){
+  message = 'page '+url.oldname+' has just been deleted'
+}else{
+  return;
+}  
+
+message += ' by me';
+
+//alert(message);
+
+var chat_databo_pagename = nugget.data();
+//alert(chat_databo_pagename);
+
+Page(chat_databo_pagename).appendsynch( 
+  JSON.stringify( [message, nugget.username, timenow()] ),  
+  function(){   
+    //alert('done!');
+    nugget.setHTML( "the change has been notified on <a href='/"+chat_databo_pagename+"'>/"+pagename+"</a>" ); 
+  }
+);
+
+
+

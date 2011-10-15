@@ -1,0 +1,194 @@
+
+load_javascript("https://raw.github.com/ianli/raphael-sketchpad/master/javascripts/raphael.sketchpad.js",function(){
+
+  var name_of_canvas = 'canvas-'+nugget.uniquename();
+  
+  nugget.out( "<div id='canvas_frame' style='border-top:25px solid #99cc33; padding-right:10px; cursor:move;'><div class='label' style='padding-left:10px;'> DRAG ME</div>  <div id='"+name_of_canvas+"'></div> </div>" );
+  nugget.setHTML();
+  
+  var sketchpad = Raphael.sketchpad(name_of_canvas, {
+    width:'100%',
+    height: '100%',
+    editing: true
+  });
+  
+  nugget.$('#canvas_frame .label').css('margin-top','-20px');
+  
+  nugget.$('#canvas_frame').append(
+    $("<div id='menu_bar'><div class='colorpick c0'></div><div class='colorpick c1'></div><div class='colorpick c2'></div><div class='colorpick c3'></div><div class='colorpick c4'></div><div class='colorpick c5'></div><div class='colorpick c6'></div> <div class='colorpick c7'></div><div class='colorpick c8'></div> <div><a href='#' id='save-doodles'> Save Doodles |</a> <a href='#' id='undo-doodles'> Undo |</a>  <a href='#' id='clear-doodles'> Clear Doodles |</a> <a href='#' id='thin-pen'> Thin Pen |</a> <a href='#' id='thick-pen'> Thick Pen</a> </div></div>")
+  );
+  
+  nugget.$('#'+name_of_canvas).mouseover(function(){
+    // nugget.$('#canvas_frame').draggable("disable"); 
+    nugget.$('#canvas_frame').fadeTo("slow", 1.0);
+  }).mouseout(function(){
+    nugget.$('#canvas_frame').draggable({handle:'.label'});  
+  });
+  
+  nugget.$('#canvas_frame').draggable({handle:'.label'}).resizable();
+  
+  nugget.$('#menu_bar').css({
+    'background-color':'#F2F2EE',
+    'padding-top':'2px',
+    'padding-bottom':'2px',
+    'max-width':'550px',
+    'position':'absolute',
+    'top':'-22px',
+    'left':'100px',
+    'z-Index':'4',
+    'width':'100%',
+    'cursor':'move'
+  }); 
+  
+  // This creates the drawing
+  
+  try {
+    var doodles = nugget.data();
+  } catch (e) {
+    var doodles = {
+      width:'100%',
+      height:'100%',
+      top:'auto',
+      left:'auto',strokes:[]
+    };
+  }  
+  
+  nugget.$('#canvas_frame').css({
+    'width': doodles.width,
+    'height': doodles.height,
+    'top': doodles.top,
+    'left': doodles.left
+  });
+  
+  
+  nugget.$('#'+name_of_canvas).css({
+    'z-Index':'3',
+    'width': '100%',
+    'height': '100%',
+    'border-left':'5px solid #99cc33',
+    'border-right':'5px solid #99cc33',
+    'border-bottom':'5px solid #99cc33',
+    'opacity':'1'
+  });
+  
+  
+  
+  sketchpad.strokes( doodles.strokes );
+  
+  nugget.$('#save-doodles').click(function(){
+    var t = nugget.$('#canvas_frame').css('top');
+    var l = nugget.$('#canvas_frame').css('left');
+    var w = nugget.$('#canvas_frame').css('width');
+    var h = nugget.$('#canvas_frame').css('height');
+    
+    var outputJson = '{"width":"'+ w +'","height":"'+ h +'","top":"'+ t +'","left":"'+ l +'","strokes":'+ sketchpad.json() +'}';
+    
+    nugget.updateJSON( outputJson );
+    alert('Your doodle has been saved!');
+  });
+  
+  nugget.$('#undo-doodles').click(function(){
+    sketchpad.undo();
+    
+  });
+  
+  nugget.$('#clear-doodles').click(function(){
+    sketchpad.clear();
+  });
+  
+  nugget.$("#thin-pen").click(function() {
+    sketchpad.pen().width(5);
+  });
+  
+  nugget.$("#thick-pen").click(function() {
+    sketchpad.pen().width(15);
+  });
+  
+  
+  nugget.$('.c0').css({
+    'background-color':'#FFFFFF',
+    'border':'1px solid #FFFFFF'  
+  });
+  
+  nugget.$('.c1').css({
+    'background-color':'#FFFF88',
+    'border':'1px solid #FFFF66'  
+  });
+  
+  nugget.$('.c2').css({
+    'background-color':'#FF7400',
+    'border':'1px solid #FF7700'  
+  });
+  
+  nugget.$('.c3').css({
+    'background-color':'#CDEB8B',
+    'border':'1px solid #CDCB9D'  
+  });
+  
+  nugget.$('.c4').css({
+    'background-color':'#006E2E',
+    'border':'1px solid #006D3D'  
+  });
+  
+  
+  nugget.$('.c5').css({
+    'background-color':'#4096EE',
+    'border':'1px solid #2066DD'  
+  });
+  
+  nugget.$('.c6').css({
+    'background-color':'#FF0096',
+    'border':'1px solid #FF1166'  
+  });
+  
+  nugget.$('.c7').css({
+    'background-color':'#B02B2C',
+    'border':'1px solid #C02C2D'  
+  });
+  
+  nugget.$('.c8').css({
+    'background-color':'#000000',
+    'border':'1px solid #000000'
+  });
+  
+  
+  nugget.$('#save-doodles').css({
+    'margin-left':'5px'
+  });
+  
+  
+  nugget.$('.colorpick').css({
+    'cursor':'pointer',
+    'float':'left',
+    'height':'10px',
+    'margin':'0 1px 0 3px',
+    'width':'10px'
+  });
+  
+  nugget.$('.colorpick').click(function(){ 
+    sketchpad.pen().color( $(this).css('background-color') );
+  });
+  
+  // jquery resize handler
+  
+  nugget.$('.ui-resizable-handle').css({
+    'width':' 8px', 'height': '8px', 'border': '1px solid #808080', 'background-color':'#F2F2F2'
+  });
+  nugget.$('.ui-resizable-n').css({
+    'left': '45%'
+  });
+  nugget.$('.ui-resizable-s').css({
+    'left': '45%'
+  });
+  nugget.$('.ui-resizable-e').css({
+    'top': '45%'
+  });
+  nugget.$('.ui-resizable-w').css({
+    'top': '45%'
+  });
+  nugget.$('.ui-resizable-se').css({
+    'bottom':'-5px',
+    'right':'-5px'
+  });
+
+});

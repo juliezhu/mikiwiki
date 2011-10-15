@@ -1,0 +1,1 @@
+<meta charset="utf-8"><div>How much do you like Archeology?</div><div><br></div><<opinion001 as opinion>><div><<opinion001 as vote>></div><div><br></div>

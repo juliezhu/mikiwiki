@@ -1,0 +1,1 @@
+[{"height":"493px","width":"687px","x":"162.72003173828125px","y":"353.12001037597656px","url":"dev/iPad_mockup/data/Dynamic-update"}]

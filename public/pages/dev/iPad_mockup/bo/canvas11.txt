@@ -1,0 +1,241 @@
+var Y_DROP_OFFSET = 40;
+var X_DROP_OFFSET = 240;
+
+// MAKE BASE INTERFACE =====================================
+
+nugget.out( "<a href='#' id='save_btn'>Save Design</a> ");
+nugget.out( "<a href='#' id='clear_btn'>Clear</a> ");
+nugget.out( "<a href='#' id='mode_btn'></a> ");
+nugget.out("<div id='mockup'/>");
+nugget.setHTML();
+
+var mockup = nugget.$('#mockup');
+mockup.css({
+  'width':'1000px',
+  'height':'1280px',
+  'margin-top':'60px',
+  'position':'relative',
+  'background-image':'url("/pages/BabyDinosaur/icons/home_lingua.png")'
+});
+
+// LOAD STUFF =====================================
+
+var components = nugget.data();
+
+function addComponent(src_of_image,link_to,x,y,w,h){
+  var component = nugget.$("<div class='mockup-component'><img src='"+ src_of_image +"'></img></div>");
+  component.attr('link_to',link_to);
+    
+  component.appendTo( mockup );
+  
+  component.css({
+      "position":"absolute",
+      "top":y,
+      "left":x
+    });
+
+  if (!!w & !!h){
+    component.find('img').css({
+      "width":w,
+      "height":h
+    });
+  }
+  
+  component.draggable({ stack: '.mockup-component' });
+  component.find('img').resizable(); 
+  
+  component.dblclick(function(){
+    openEditingPopup( $(this) );
+  });
+
+}
+
+for(var i=0; i<components.length; i++){
+  addComponent(
+    components[i].image,
+    components[i].link_to,
+    components[i].x, components[i].y,
+    components[i].width, components[i].height
+  );
+}
+
+
+// DRAG AND DROP =====================================
+/*
+function enableDroppable(){
+  mockup.droppable({
+    drop: function(event,ui){
+      if (!ui.draggable.is('.mockup-component')){
+        addComponent(
+          ui.draggable.find('img').attr("src"), "",
+          ui.position.left-X_DROP_OFFSET, ui.position.top-Y_DROP_OFFSET
+        );
+      }      
+    }
+  });
+}
+*/
+function enableDroppable(){
+  mockup.droppable({
+    accept: "*:not(.mockup-component)",
+    drop: function(event,ui){
+      var landing_x = ui.offset.left - mockup.offset().left;
+      var landing_y = ui.offset.top - mockup.offset().top;
+      addComponent( ui.draggable.find('img').attr("src"), "", landing_x, landing_y );
+    }
+  });
+}
+
+enableDroppable();
+
+// HANDLE MODES =====================================
+
+var mode;
+
+function enableLinking(){
+  
+  var components = $('.mockup-component');
+  components.unbind('click');
+  components.find('img').unbind('click'); 
+  components.unbind('dblclick');
+  components.find('img').unbind('dblclick'); 
+
+  components.draggable('destroy');  
+  components.find('img').resizable('destroy'); 
+  
+  components.click(function(){
+    var link = $(this).attr('link_to');
+    
+    if (!!link && link!=''){
+      //alert( "JUMPING TO: "+link );
+      location.href = link;
+    }
+  });
+}
+
+function disableLinking(){
+  var components = $('.mockup-component');
+  components.unbind('click');
+  components.find('img').unbind('click'); 
+  components.unbind('dblclick');
+  components.find('img').unbind('dblclick'); 
+  
+  components.draggable({ stack: '.mockup-component' });
+  components.find('img').resizable(); 
+  
+  components.dblclick(function(){
+    openEditingPopup( $(this) );
+  });
+}
+
+function setSimulationMode(){
+  mode = 'simulation';
+  nugget.$('#mode_btn').text('SWITCH TO EDIT MODE').css({
+    backgroundColor: 'yellow'
+  });
+  enableLinking();
+}
+
+function setEditingMode(){
+  mode = 'editing';
+  nugget.$('#mode_btn').text('SWITCH TO SIMULATION MODE').css({
+    backgroundColor: 'lightblue'
+  });
+  disableLinking();
+}
+
+setSimulationMode();
+
+$('#mode_btn').click(function(){
+  if (mode == 'simulation'){
+    setEditingMode();
+  }else{
+    setSimulationMode();
+  }
+});
+
+// EDITING INTERFACE =====================================
+
+
+function openEditingPopup(target){
+
+  $('#edit_box').remove(); // there should only be one at a time
+  
+  var editingPopup = nugget.$("<div id='edit_box'></div>");
+  
+  editingPopup.css({ 
+    'opacity':'0.8',
+    'z-index':'1000',
+    'text-align':'left',
+    'border-radius':'4px',
+    '-moz-border-radius':'4px',
+    '-webkit-border-radius':'4px',
+    'padding':'8px',
+    'max-width':'200px',
+    'color':'#fff',
+    'background-color':'#000',
+    'left': '20px',
+    'position': 'relative',
+    'height': '50px'
+  });
+  
+  editingPopup.append('Link to page:');
+  editingPopup.append("<input type='text'></input>");
+  editingPopup.append("<p><a href='#'>[X]</a></p>");
+  
+  editingPopup.find('input').css({
+    width: 100,
+    marginLeft: 10
+  });  
+
+  editingPopup.appendTo( target );
+  
+  editingPopup.find('a').click(function(){
+    editingPopup.remove();
+  });
+  
+  editingPopup.find('input').val( target.attr('link_to') );
+  editingPopup.find('input').keyup(function(){
+    target.attr('link_to', editingPopup.find('input').val() );  
+  });
+}
+
+
+// SAVE DATA =====================================
+
+
+$('#save_btn').click(function(){
+  var all = [];
+  nugget.$("#mockup .mockup-component").each(function(index, mockup){
+    
+    all[index] = {
+      "image":$(this).find('img').attr('src'),
+      "height":$(this).css("height"), 
+      "width":$(this).css("width"), 
+      "x":$(this).css("left"), 
+      "y":$(this).css("top"),
+      "link_to": $(this).attr('link_to')
+    };
+  });
+  
+  nugget.updateJSON( all );
+  alert("The iphone mockup has been saved");
+});
+
+
+// CLEAR CANVAS =====================================
+
+$('#clear_btn').click(function(){
+  nugget.$("#mockup .mockup-component").remove(); 
+});
+  
+
+
+  
+
+
+  
+  
+  
+  
+  

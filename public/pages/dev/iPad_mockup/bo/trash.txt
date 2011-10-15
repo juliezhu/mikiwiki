@@ -1,0 +1,17 @@
+nugget.setHTML("<div id='trash'/>");
+
+nugget.$('#trash').html('Trash').css({
+  width: '130px',
+  height:'130px',
+  'font-size':'300%',
+  'color':'#ffffff',
+  'font-weight':'bold',
+  'float':'right',
+  'margin-left':'40px',
+  'padding': '0.5em',
+  'background-color':'#000'
+}).droppable({
+  drop: function(event,ui){
+    ui.draggable.remove();
+  }
+});  

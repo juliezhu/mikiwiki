@@ -1,0 +1,6 @@
+<<video:@url@>>
+
+<<vote-@name@ as vote>>
+
+<<wall-@name@ as wall>>
+

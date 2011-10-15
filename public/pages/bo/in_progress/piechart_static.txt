@@ -1,0 +1,10 @@
+load_javascript("http://jquerysheet.googlecode.com/svn-history/r284/trunk/plugins/g.pie-min.js",function(){
+  nugget.setHTML("<div id='holder'></div>");
+  
+  chart = nugget.data();
+  
+  var r = Raphael("holder");
+  r.g.txtattr.font = "12px 'Fontin Sans', Fontin-Sans, sans-serif";
+  r.g.text(320, 70, chart.title).attr({"font-size": 20});
+  r.g.piechart(320, 240, 150, chart.data);
+});

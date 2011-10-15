@@ -1,0 +1,15 @@
+<div id="mytweets">
+  some tweets here
+</div>
+
+<script>
+  load_javascript("http://tweet.seaofclouds.com/jquery.tweet.js",function(){
+    $("#mytweets").tweet({
+        join_text: "auto",
+        username: "johnmaeda",
+        avatar_size: 48,
+        count: 5,
+        loading_text: "loading tweets..."
+    });
+  });
+</script>

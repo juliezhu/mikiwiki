@@ -1,0 +1,45 @@
+/*
+  
+if it's youtube video
+
+regular-Expressions [ http://www.youtube.com/watch?v=WRJPNANt8dY&feature=relmfu]
+
+videoID = WRJPNANt8dY
+
+embeding_URL = http://www.youtube.com/embed/videoID
+
+
+if it's vimeo video
+
+regular-Expressions[ http://vimeo.com/25584378]
+
+videoID = 25584378
+
+embeding_URL = http://player.vimeo.com/video/videoID
+
+*/
+
+var url = nugget.data()[0];
+
+var youtube_video = /youtube\.com/i;
+
+var template = '';
+
+if (url.match(youtube_video) != null)
+{
+
+  var videoID = /v=(.*)&/i;
+  var video_code = url.match(videoID)[1];
+
+  template = '<iframe width="560" height="345" src="http://www.youtube.com/embed/'+video_code+'" frameborder="0" allowfullscreen></iframe>';
+    
+}else{
+  
+  var videoID = /vimeo\.com\/(.*)/i;
+  var video_code = url.match(videoID)[1]; 
+
+  template = '<iframe width="560" height="345" src="http://player.vimeo.com/video/'+video_code+'" frameborder="0" allowfullscreen></iframe>';
+
+}
+
+nugget.setHTML(template);

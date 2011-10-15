@@ -1,0 +1,7 @@
+{ 
+"email": "", 
+"name": "admin", 
+"skype":"",
+"role": "admin" ,
+"picture": "http://www.lodogg.com/forum/uploads/avatars/20070314_200434_1587-76039.png"
+} 

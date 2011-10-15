@@ -1,0 +1,1 @@
+<<in_progress/piechart_dynamic:{"data":[55, 20, 13, 32, 2, 10],"title":"my interactive chart", "legend":["%%.%%  End Users", "Software Engineers", "%%.%%-Designers", "%%.%%-Domain Experts"], "href": ["http://mikamai.com", "http://dico.unimi.it", "http://cslab.unimi.it"]}>>

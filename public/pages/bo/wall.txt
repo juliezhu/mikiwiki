@@ -1,0 +1,52 @@
+var ct = nugget.data();
+
+function makeEntry(entry){
+  var comment = entry[0];
+  var username = entry[1];
+  var time = new Date(parseInt(entry[2]));
+  var nice_time = time.getDate()+"/"+(time.getMonth()+1)+"/"+time.getFullYear()+", "+time.getHours()+":"+time.getMinutes();
+
+//    var new_comment = $("<li style='margin:5px 5px 10px 5px; padding:5px; border:1px solid #ccc; max-width:300px'><em><span></span> by "+username+"</em> on "+nice_time+"<br/>" + comment +" </li>");
+
+  var new_comment = $("<li/>").css({
+    margin:'5px 5px 10px 5px',
+    padding:'5px',
+    border:'1px solid #ccc',
+    'max-width':'300px'
+  }).append("<span/>")
+    .append("<em>by "+username+"</em> on "+nice_time)
+    .append(comment);  
+      
+  
+  Page('users/'+username).getJSON(function(user){
+    new_comment.find('span').append( "<img src='" + user.picture + "' style='width:20px; height:20px; display:inline; margin:5px 0px 0px 5px; padding:0'/>" );
+  }); 
+  
+  return new_comment;   
+}
+
+function displayChat(){
+  for(var i=0; i<ct.length; i++){
+    $(nugget.id+' ul').append( makeEntry(ct[i]) );
+  }
+}
+
+function timenow(){ return (new Date()).getTime(); }
+
+nugget.out( "<ul></ul>" );  
+nugget.out( "<form action='#'>" );
+nugget.out( " <input type='text' id='comment-input'/>" );
+nugget.out( " <input type='submit' id='comment-submit'/>" );
+nugget.out( "</form>" );
+nugget.setHTML();
+
+displayChat();
+
+$('#comment-submit').click( function(){
+  ct[ct.length]=[$('#comment-input').val(), nugget.username, timenow()];
+  
+  nugget.afterUpdating = displayChat;
+  
+  nugget.updateJSON( ct );
+  return false;
+});

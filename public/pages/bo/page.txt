@@ -1,0 +1,179 @@
+var stickypages = nugget.data();
+
+$('.ui-resizable-se').css('bottom','17px');
+
+var name_of_pagenote = 'notes-'+nugget.uniquename();
+
+nugget.out( "<a href='#' id='savestickypages'>Save Panels</a> " );
+nugget.out( "<a href='#' id='add-pagenote'>Add Panel</a> " );
+nugget.out( "<div id='"+name_of_pagenote+"'></div>" );
+nugget.setHTML();
+
+function render_page(pagename,note){
+  var pagecontent = "<"+"<"+pagename+">"+">";
+  
+  Page('explode').load({body:pagecontent,context:nugget.topenvelopePagename()},function(content){
+    note.find('.loadedpage').remove();
+    note.append("<div class='loadedpage'>"+content+"</div>");
+  });
+}
+
+/* ======= NOTE STRUCTURE ========
+   div.stickypage#stickypage-3         << draggable, resizable
+     div.handle
+       span THIS-IS-THE-TITLE
+       a.delete-icon [X]
+     input THIS-IS-THE-TITLE
+     div.loadedpage CONTENT-GOES-HERE
+   ===============================
+*/
+
+nugget.$('#savestickypages').css({
+  'width':'100px',
+  'height':'25px',
+  'background-color':'#fafafa',
+  'border':'1 solid #eee',
+  'text-align':'center',
+  'font-weight':'bold',
+  'padding':'5px',
+  'margin-right':'3px',
+  '-moz-border-radius': '5px',
+  '-webkit-border-radius': '5px',
+  '-khtml-border-radius': '5px',
+  '-webkit-box-shadow':'#CCCCCC 2px 2px 2px' 
+});
+
+nugget.$('#add-pagenote').css({
+  'width':'100px',
+  'height':'25px',
+  'background-color':'#fafafa',
+  'border':'1 solid #eee',
+  'text-align':'center',
+  'font-weight':'bold',
+  'padding':'5px',
+  'margin-right':'3px',
+  '-moz-border-radius': '5px',
+  '-webkit-border-radius': '5px',
+  '-khtml-border-radius': '5px',
+  '-webkit-box-shadow':'#CCCCCC 2px 2px 2px' 
+});
+
+  nugget.$('#savestickypages').mouseenter(function(){
+    nugget.$( "#savestickypages").css({'background-color':'00bbff','color':'#fff'});
+  }).mouseout(function(){
+    nugget.$( "#savestickypages").css({'background-color':'#fafafa','color':'#444'});
+  });
+  
+  nugget.$('#add-pagenote').mouseenter(function(){
+    nugget.$( "#add-pagenote").css({'background-color':'#00bbff','color':'#fff'});
+  }).mouseout(function(){
+    nugget.$( "#add-pagenote").css({'background-color':'#fafafa','color':'#444'});
+  });
+  
+
+function addNote(obj){
+  var i = nugget.$("#"+name_of_pagenote+" .stickypage").size(); // get next available id
+  var mypage = obj.url; 
+  
+  var note = nugget.$("<div id='stickypage-"+i+"' class='stickypage'></div>");
+  var handle = nugget.$("<div class='handle'><span>"+mypage+"</span> <a class='delete-icon' href='#'>[X]</a></div>");
+  var input_text = nugget.$("<input style='width:"+obj.width+"'display:block;'/>").val(mypage);  
+
+  note.append(handle);
+  note.append(input_text);
+  
+  render_page(mypage,note); 
+  
+  note.css({
+    'background-color':'#fff',
+    "opacity":'0.9',
+    "width":obj.width,
+    "height":obj.height,
+    "position":"absolute",
+    "left":obj.x,
+    "top":obj.y,
+    "padding":"5px",
+    'border':'1px solid #ddd',
+    '-moz-border-radius':'5px',
+    '-webkit-border-radius':'5px'
+  }); 
+
+  note.find('.handle').css({
+    "font-size":"15px",
+    "padding":"5px 0 2px 0",
+    "font-weight":"bold",
+    "text-align":"center",
+    "display":'block',
+    "cursor":"move",
+    "width":obj.width,
+    "height":'30px',
+    "top":obj.y,
+    "left":obj.x,
+    'background-color':'#eee',
+    'color':'#000',
+    'border-bottom':'1px solid #eee',
+    'font-family':'Verdana'
+  });
+  
+  note.find(".loadedpage").css({
+    "width":obj.width
+  });
+
+  note.draggable({handle:'.handle'});
+  note.resizable({handles:'se', alsoResize:note.find(".loadedpage")});  
+  
+  // load note content when typing
+  note.find('input').typing({
+    start: function(){
+      var title = note.find('input').val();
+      render_page( title ,note);
+      note.find('.handle span').text( title ); 
+    }
+  });
+    
+  // toggle note content
+  note.find('.handle').click(function(){   
+  //  note.find('.loadedpage').slideToggle("slow");
+   // note.find('input').toggle();    
+  });
+
+  // delete note
+  note.find('.delete-icon').click(function(e){
+    note.remove();
+//    $(e.target).parents('.stickypage').remove();
+  });
+  
+
+  $('#'+name_of_pagenote).append( note ); 
+}
+
+// Loading the stickypages on the canvas
+
+for(var i=0; i<stickypages.length; i++){
+  addNote( stickypages[i] );
+}
+
+var saveStickypages = function(){
+  var all = [];
+  $("#"+name_of_pagenote+" .stickypage").each(function(index,note){
+    
+    all[index] = {
+      "height": $(this).css('height'), 
+      "width":$(this).css('width'), 
+      "x":$(this).css("left"), 
+      "y":$(this).css("top"), 
+      "url":$(this).find('input').val()
+    };
+  });
+  
+  nugget.updateJSON( all );
+  alert("your page panels have been saved!");
+}
+
+nugget.$('#savestickypages').click(saveStickypages);
+
+nugget.$('#add-pagenote').click(function(){
+  addNote({'width':'160px','height':'150px','text':"...", 'x':'200px','y':'200','url':'none'});
+});
+
+

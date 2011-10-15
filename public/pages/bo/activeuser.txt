@@ -1,0 +1,150 @@
+nugget.setHTML("<div class='activities'></div>");
+
+var activities = nugget.$('.activities');
+var this_page_name = nugget.topenvelopePagename();
+
+var arg = nugget.singledata();
+
+$('.activities').css({
+  height:'40px'
+});
+
+
+function display_all_user_names(people_entries,activities){
+  activities.empty();
+  
+  for(var i=0; i<people_entries.length; i++){
+    var person_name = people_entries[i][0];
+    var person_pages = people_entries[i][1];
+    
+    activities.append( person_name+" " );
+  }          
+  
+}
+
+function display_all_user_activities(people_entries,activities){
+  activities.empty();
+  
+  for(var i=0; i<people_entries.length; i++){
+    var person_name = people_entries[i][0];
+    var person_pages = people_entries[i][1];
+      
+    activities.append( person_name + ": " );
+    
+    for(var page_i=0;page_i<person_pages.length;page_i++){
+      var link_to_page = Page(person_pages[page_i]).html_link();
+      activities.append( link_to_page + " ");
+    }
+    
+    activities.append( "<br/>" );
+  }          
+}
+
+function display_all_user_thumbnails(people_entries,activities,arg){
+
+  // clean those user spans that don't have their id present in people_entries
+  
+  var people_names = [];
+  for(var i=0; i<people_entries.length; i++){
+    people_names.push( people_entries[i][0] );    
+  }
+  
+  activities.find('span').each(function(){
+    var this_span_id = $(this).attr('id');
+    
+    // this_span_id IS NOT IN people_names
+    if ( $.inArray(this_span_id,people_names)==-1 ){
+//      alert("deleting "+this_span_id+" becuase did not find it inside "+JSON.stringify(people_names));
+      $(this).remove();
+    } 
+  });
+   
+  for(var i=0; i<people_entries.length; i++){
+    var person_name = people_entries[i][0];
+    var person_pages = people_entries[i][1];
+    
+    // if arg == none or arg == pic or arg==whoishere AND user is on this page
+    if (arg != 'who-is-here' || (arg == 'who-is-here' && $.inArray(this_page_name,person_pages))!=-1 ){
+      
+      // create spans for those people in people entries that do not have a span yet
+      
+      var user_span = activities.find("span#"+person_name);
+      
+      if ( user_span.length == 0 ){
+        user_span = $("<span id='" + person_name + "'></span>");
+        user_span.appendTo(activities);
+      }
+      
+      // here user_span has a value.. either because it existed already, or we created it!     
+      
+      // if no options, show all!
+      if (arg != 'pic' && arg != 'who-is-here') {
+        display_user_thumbnail(person_name,user_span,person_pages);
+      }else{
+        display_user_thumbnail(person_name,user_span);
+      }
+      
+    } // if
+  } //for 
+  
+} // function
+
+  
+function display_user_thumbnail(person_name,target,person_pages){
+  Page('users/'+person_name).getJSON(function(user){
+    
+    target.html( 
+      "<a href='/users/" + user.name + "' class='userpic'><img src='" + user.picture + "' title='"  + user.name + "'/></a>" 
+    );
+    
+    target.find('img').css({
+      'height': '30px',
+      'margin-right':'6px',
+      'display': 'inline',
+    });
+    
+    // show pages the user is watching
+    if (typeof(person_pages) != "undefined") {
+      for(var page_i=0;page_i<person_pages.length;page_i++){
+        var link_to_page = Page(person_pages[page_i]).html_link();
+
+        var split_result = person_pages[page_i].split("/");
+        var show_pagename = split_result[split_result.length-1];
+    
+        target.append( link_to_page );
+        target.find("a:not(.userpic)").html(show_pagename);
+        
+        //alert(split_result[split_result.length-1]);
+      }
+    }
+    
+  }); 
+}
+
+  
+$.doTimeout( 2000, function(){
+
+  if ( isActiveTab() ){
+    
+    // tell the server where we are
+    Page('ping').loadContent({page:this_page_name}, function(){
+      
+      // check who is doing what, where
+      Page('activity').getJSON(function(people_entries){
+        if (arg == 'name'){
+          display_all_user_names(people_entries,activities);
+        } else if (arg == 'page'){
+          display_all_user_activities(people_entries,activities);
+        } else {
+          display_all_user_thumbnails(people_entries,activities,arg);
+        }
+      }); //activity
+      
+    }); //ping
+    
+  } // end if isActiveTab
+  
+  return true;
+}); //end timer loop
+
+

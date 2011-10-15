@@ -1,0 +1,2 @@
+* This is the main page
+[[expand:_help]]uh-uh does it work?

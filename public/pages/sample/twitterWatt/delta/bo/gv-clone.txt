@@ -1,0 +1,42 @@
+nugget.out(" <div id='chart_div' style='width: 900px; height: 300px;'></div>" );
+nugget.setHTML();
+
+google.load('visualization', '1', {'packages':['corechart']});
+google.setOnLoadCallback(drawChart);
+
+function drawChart() {
+  var data = new google.visualization.DataTable();
+  data.addColumn('string', 'Year');
+  data.addColumn('number', 'Sales');
+  data.addColumn('number', 'Expenses');
+  data.addRows(4);  
+
+  
+  $.getJSON(nugget.data()[0],function(tweets){     
+    alert(nugget.data()[0]);   
+    var all_my_watts = [];
+    var all_my_Wh = [];
+    var all_pre_Wh = [];
+
+    $.each(tweets, function(i,item){
+      var watts = item.text.split(' ')[2];
+      var Wh = item.text.split(' ')[4];
+      var pre_Wh = item.text.split(' ')[9];
+      all_my_watts.push( parseInt(watts) );
+      all_my_Wh.push( parseInt(Wh) );
+      all_pre_Wh.push( parseInt(pre_Wh) );
+    }); 
+    
+    data.setValue(96,100, 'mon');
+    data.setValue(all_my_Wh[0], all_my_Wh[1], 'mon');
+    data.setValue(all_pre_Wh[0], all_my_Wh[1], 'mon');
+  });
+  
+
+  alert(2);
+  var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+  chart.draw(data, {title: 'twitterWatt'});
+}
+  
+alert("123");
+

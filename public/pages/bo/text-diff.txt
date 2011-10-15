@@ -1,0 +1,19 @@
+load_javascript("http://google-diff-match-patch.googlecode.com/svn-history/r94/trunk/javascript/diff_match_patch.js",function(){
+  
+  $(document).ready(function(){
+    var dmp = new diff_match_patch();
+    
+    var text1 = $('div#text1').text();
+    var text2 = $('div#text2').text();
+    
+    var differences = dmp.diff_main(text1, text2);
+    dmp.diff_cleanupSemantic(differences);
+    var ds = dmp.diff_prettyHtml(differences);
+    
+    nugget.out('<h3>Version Differences</h3>');
+    nugget.out('<div id="outputdiv">'+ds + '</div>');
+    
+    nugget.setHTML();
+    
+  });
+});

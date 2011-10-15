@@ -1,0 +1,14 @@
+
+# ignore the log files directory
+/data
+
+# ignore wiki folder for local storage (videos & heavy stuff)
+/public/pages/local/**/*
+
+# ignore history: starting with "__"
+__*
+
+# IGNORE all stuff under /users, after having added admin user
+# /public/pages/users/**/*
+
+

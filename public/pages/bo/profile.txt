@@ -1,0 +1,8 @@
+var username = nugget.singledata();
+
+Page('users/'+username).getJSON(function(user){
+  nugget.setHTML("<span><img src='" + user.picture + "' style='width:20px; height:20px; display:inline;'/></span>");
+}); 
+
+
+

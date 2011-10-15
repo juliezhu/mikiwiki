@@ -1,0 +1,9 @@
+<<tasks_table001 as in_progress/tasks_table>>  
+<div style="width:100%;float:left;">
+<div id="myGrid" style="width:100%;height:500px;"></div>
+</div> 
+  
+<div id="dropzone" class="recycle-bin">
+  Recycle Bin
+</div>
+  

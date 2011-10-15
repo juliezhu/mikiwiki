@@ -1,0 +1,13 @@
+function(req){
+        Page('users/'+req.username).loadContent(function(data){
+             var user = JSON.parse(data);
+             var chk = req.jsondata();
+
+             if (user.role != 'admin' && user.role != chk.allow){
+                 $('.pagebody').remove();
+                 location.href = '/access-denied';
+             }
+
+        });
+
+}

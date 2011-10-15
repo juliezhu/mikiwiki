@@ -1,0 +1,85 @@
+function timenow(){ 
+  return (new Date()).getTime(); 
+}
+
+function replaceURLWithHTMLLinks(text) {
+  var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+  return text.replace(exp,"<a href='$1'>$1</a>"); 
+}
+
+function nice_time(time){
+  var today = new Date();
+  
+  if (today.getDate()==time.getDate() && today.getMonth()==time.getMonth() && today.getFullYear()==time.getFullYear()){
+    return time.getHours()+":"+time.getMinutes(); 
+  }else{
+    return time.getDate()+"/"+(time.getMonth()+1)+"/"+time.getFullYear()+", "+time.getHours()+":"+time.getMinutes(); 
+  }
+}
+
+function addThumbnail(username,jqelement){
+  Page('users/'+username).getJSON(function(user){
+    jqelement.append( 
+      "<img src='" + user.picture + "' title='"+username+"' style='width:20px; height:20px; display:inline; margin:2px 5px 0px 2px; padding:0; border: 1px solid black;'/>" 
+    );
+  }); 
+}
+
+function makeEntry(entry){
+  var comment = entry[0];
+  var username = entry[1];
+  var time = new Date(parseInt(entry[2]));
+
+  var date_time = nice_time(time);
+  
+  var new_comment = $("<li></li>").css({
+    margin:'0px 5px 5px 0px', 
+    padding:'1px', 
+    border:'1px solid #ccc','max-width':'300px',
+    color: 'black',
+    backgroundColor: 'white',
+    listStyleType: 'none',
+    listStyleImage: 'none'
+  }).append('<span/>')
+    .append( 
+    "<em>" + date_time + "</em> " + replaceURLWithHTMLLinks(comment)
+  );  
+          
+  addThumbnail(username, new_comment.find('span') );
+  
+  return new_comment;   
+}
+
+function displayChat(commentlist,numcomments){
+  //clean chat
+  nugget.$('ul *').remove();
+  
+  var start_i = commentlist.length > 15 ? commentlist.length-numcomments : 0;
+  
+  for(var i=start_i; i<commentlist.length; i++){
+    nugget.$('ul').append( makeEntry(commentlist[i]) );
+  }
+}
+
+// START
+nugget.out( "<ul style='list-style-image: none; list-style-type: none;'></ul>" );  
+nugget.out( "<form action='#'>" );
+nugget.out( " <input type='text' id='comment-input'/>" );
+nugget.out( " <input type='submit' id='comment-submit'/>" );
+nugget.out( "</form>" );
+nugget.setHTML();
+
+nugget.afterUpdating = function(commentlist){
+  displayChat(commentlist,15); //max 8 comments
+};
+
+nugget.synchronizeJSONevery(3000);
+
+// EVENT HANDLING
+
+nugget.$('#comment-submit').click( function(){
+  var input_data = nugget.$('#comment-input').val();
+  nugget.appendsynchJSON( [input_data, nugget.username, timenow()] );
+  nugget.$('#comment-input').val(''); //clean inputbox
+  return false;
+});

@@ -1,0 +1,38 @@
+var orders = nugget.data();
+
+nugget.out("<table><tr><th>Volume</th><th>Item</th><th>Price</th></tr>"); 
+
+for(var i=0; i<orders.length; i++){
+  var volume = orders[i][0];
+  var item = orders[i][2];  
+  var price = orders[i][5]; 
+  nugget.out("<tr><td>"+ volume+ "</td><td>"+item+"</td><td>"+price)};
+
+nugget.out( "</td></tr></table>"); 
+
+nugget.setHTML();
+
+
+$('table').css({
+  'width':'400px',
+  'border':'1px solid grey',
+  'text-align':'center'
+});
+
+$('td').css({
+  'border':'1px solid grey',
+  'text-align':'center'
+}); 
+
+$('tr:even').css({
+  'background-color':'lightpink',
+  'text-align':'center'
+}); 
+
+
+$('th').css({
+  'background-color':'#eee',
+  'border':'1px solid grey',
+  'text-align':'center',
+  'height':'30px'
+}); 

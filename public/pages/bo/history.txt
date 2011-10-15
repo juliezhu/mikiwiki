@@ -1,0 +1,70 @@
+var filepath = nugget.singledata();
+
+var parts = filepath.split("/");
+var name = parts[parts.length-1];
+
+var folder_info = "";
+
+if (parts.length == 1) {
+  folder_info = "__" + name;
+} else {
+  folder_info = parts.slice(0,parts.length-1).join('/') + "/__" + name;
+}
+
+function render_page(pagename,selector){
+  //Page(pagename).renderTo('#snapshot');
+  Page(pagename).loadContent(function(loadedpage_html){
+    nugget.$('#snapshot').html(loadedpage_html);
+  });
+}
+
+nugget.out("<div id='snapshot'></div>");
+
+Page(folder_info).subpages(function(pages){
+
+  nugget.out("<ul>");
+  
+  for(var i=0; i<pages.length; i++){
+    
+    nugget.out("<li>");
+    
+    if (pages[i].is_environment){
+      nugget.out("<img id='web_icon_folder' src='/siteImages/env.png'/>");      
+    }else if (pages[i].is_folder){
+      nugget.out("<img id='web_icon_folder' src='/siteImages/folder.png'/>");
+    } else {
+      nugget.out("<img id='web_icon_doc' src='/siteImages/document.png'/>");
+    }
+    
+    nugget.out(" <a href='/"+pages[i].name+"'>"+pages[i].shortname+"</a>");
+    nugget.out(" <a href='#' class='preview-button' page='"+pages[i].name+"'>preview</a>");
+    
+    if (!pages[i].is_folder) {
+      if (pages[i].info.format != 'miki'){
+        nugget.out(" ... "+pages[i].info.format);    
+      }
+      
+//      nugget.out(" <<profile:"+pages[i].info.user+">> updated it on "+pages[i].info.update);
+      nugget.out(" - <a href='/users/"+pages[i].info.user+"'>"+pages[i].info.user+"</a> <em>"+pages[i].info.update+"</em>");
+    }
+    
+    nugget.out("</li>");
+  }
+  nugget.out("</ul>");
+  
+  nugget.setHTML();
+  
+  nugget.$('#snapshot').css({
+    border: '2px solid lightgrey',
+    padding: 4,
+    marginBottom: 20,
+    minHeight: 100
+  });
+  
+  nugget.$('.preview-button').click(function(){
+    render_page( $(this).attr('page'), nugget.$('#snapshot') );
+  });
+
+});
+
+

@@ -1,0 +1,64 @@
+** Formatting
+   
+ * Header1
+ ** Header2
+ *** Header3
+ * * bold * *
+ _ _ italic _ _
+   
+ [ [ link-to-page ] ]
+ [ [ include:pagename ] ]
+ [ [ expand:pagename ] ]
+ 
+*** Content
+video - include youtube or vimeo videos
+file - include pdf or ppt files
+css- include external css
+website - include external website
+
+*** Coordination
+todo - edit items 
+task-table – advanced to-do list
+
+*** Communication   
+comment - anonymous 
+wall - username + time 
+chat - real-time 
+
+*** Annotations   
+doodle – drawing
+note – annotation
+sync-note - real-time collaborative annotation 
+imagenote - images as notes
+sync-imagenote - real-time collaborative creating images
+page - pages as notes
+videonote - videos as notes
+flickr - text notes to flickr images 
+vote - multiple voting
+opinion - vote with username and time
+tag – keywords
+    
+*** Awareness (asynchronous)      
+ lasteditor - show last editor of page
+ notify - to people
+ notify-chat:mydir/mychat-data 
+   
+*** Awareness (realtime)      
+ profile:mike - show profile of a user
+ activeuser - name, pic, pages
+ activeuser:name - show name only  
+ activeuser:page - show only name+page
+ activeuser:pic  - show only thumbnail
+ activeuser:who-is-here - show pics of people on this page   
+   
+*** Localization
+ translation-menu - a set of languages to choose from
+ autotranslate:it to specify a certain language to translate (en,fr,de,it,zh,jp..)
+ 
+*** Authentication
+ allow:julie,designer,mike+r,accountant+r - allow access only to some users. +r stands for read-only. 
+ allow:all+readonly - only the admin can edit this
+   
+*** History
+text-diff: show differences between two versions
+  

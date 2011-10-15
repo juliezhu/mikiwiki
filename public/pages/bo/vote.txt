@@ -1,0 +1,43 @@
+// {'username':{'time','value'} }
+//
+load_css("http://miki.aqalert.net/javascript/star-rating/jquery.rating.css");
+
+load_javascript("http://jquery-star-rating-plugin.googlecode.com/svn/trunk/jquery.rating.js",function(){
+  
+  
+  var votes = nugget.data('{}');
+  
+  nugget.out( '<div class="stars">' );
+  nugget.out( '   <input class="star" type="radio" name="fivestars-rating" value="1" title="Worst"/>' );
+  nugget.out( '   <input class="star" type="radio" name="fivestars-rating" value="2" title="Bad"/>' );
+  nugget.out( '   <input class="star" type="radio" name="fivestars-rating" value="3" title="OK"/>' );
+  nugget.out( '   <input class="star" type="radio" name="fivestars-rating" value="4" title="Good"/>' );
+  nugget.out( '   <input class="star" type="radio" name="fivestars-rating" value="5" title="Best"/>' );
+  nugget.out( '</div>' );
+  
+  nugget.setHTML();
+  
+  
+  // calculate average vote
+  var t = 0;
+  
+  for (var key in votes ){
+    t = t + parseInt(votes[key].value);
+  }
+  
+  if (keys(votes).length > 0){
+    t = t / keys(votes).length;
+  }else{
+    t = 0;
+  }
+  
+  nugget.$('.star[value='+t+']').attr('checked','checked');
+  
+  nugget.$('.star').rating({
+    callback: function(vote, link){
+      votes[nugget.username] = {time: (new Date()), value: vote};
+      nugget.updateJSON( votes );
+    }
+  });
+  
+});

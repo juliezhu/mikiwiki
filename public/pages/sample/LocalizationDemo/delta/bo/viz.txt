@@ -1,0 +1,11 @@
+var orders = nugget.data();
+
+for(var i=0; i<orders.length; i++){
+  var volume = orders[i][0];  
+  var color = orders[i][3];  
+  var item = orders[i][2];  
+  
+  nugget.out( "<div style='width:150px;height:60px;background-color:"+color+";font-size:1.2em;text-align:center;'>x"+volume+ " " +item+ "</div>" )
+}    
+    
+nugget.setHTML();

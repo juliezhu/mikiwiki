@@ -1,0 +1,27 @@
+nugget.out( '<div id="holder"></div><div id="tweets"></div>' );
+nugget.setHTML();
+//alert(JSON.stringify(nugget.data()));
+var r = Raphael("holder");
+r.g.text(320, 20, "Wattsy!!!").attr({"font-size": '30px', "font-weight":"bold"});
+
+fin = function () {
+  this.flag = r.g.popup(this.bar.x, this.bar.y, this.bar.value || "0").insertBefore(this);
+}
+fout = function () {
+  this.flag.animate({opacity: 0}, 300, function () {this.remove();});
+}
+  
+  $.getJSON(nugget.data()[0],function(data){            
+    var all_my_watts = [];
+    
+    $.each(data, function(i,item){
+      var watts = item.text.split(' ')[2];
+      all_my_watts.push( parseFloat(watts) );
+    });
+    
+    $("#tweets").append("ALL MY DATA: "+all_my_watts.join('|') );
+    
+    var bar = r.g.barchart(10, 10, 600, 220, [all_my_watts]).hover(fin, fout);
+  });
+
+$('#holder').css({'height':'300px'});

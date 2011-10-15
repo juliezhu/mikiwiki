@@ -1,0 +1,32 @@
+var url = $.parseQuery()  
+var message = '';
+
+var pagename = nugget.topenvelopePagename();
+  
+if (url.changed == 'saved'){
+  message = 'page '+pagename+' has just been saved'
+}else if (url.changed == 'renamed'){
+  message = 'page '+url.oldname+' has just been renamed to ' + pagename
+}else if (url.changed == 'deleted'){
+  message = 'page '+url.oldname+' has just been deleted'
+}else{
+  return;
+}  
+
+message += ' by ' + nugget.username;
+
+var usernames = nugget.data();
+
+
+if (url.changed) {
+    nugget.setHTML("notifying "+usernames.join(', ')+" of changes");
+}
+      
+Page('notify').loadContent(
+  {to: usernames, body: message, mode:'email'},
+  function(){  
+    alert('notify done'); 
+    nugget.setHTML( usernames.join(', ') +(usernames.length>1 ? " have " : " has ") + "been notified about the change" ); 
+  }
+); 
+

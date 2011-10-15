@@ -1,0 +1,102 @@
+load_javascript("http://www.highcharts.com/js/highcharts.js",function(){
+  
+  Highcharts.setOptions({
+    global: {
+      useUTC: false
+    }
+  });
+  
+  var chart;
+  $(document).ready(function() {
+    chart = new Highcharts.Chart({
+      chart: {
+        renderTo: 'container',
+        defaultSeriesType: 'spline',
+        marginRight: 10,
+        events: {
+          load: function() {
+            setInterval(function() {
+              Page('dev/iPad_mockup/data/Energy_data').getJSON(function(data){    
+                var x = (new Date()).getTime(); // current time
+                chart.series[0].addPoint([x, parseFloat(data.Amp)], true, true);
+                chart.series[1].addPoint([x, parseFloat(data.Watt)], true, true);
+              });
+            }, 1000);
+          }
+        }
+      },
+      title: {
+        text: 'Tweet-A-Watt Energy Data'
+      },
+      xAxis: {
+        type: 'datetime',
+        tickPixelInterval: 150
+      },
+      yAxis: {
+        title: {
+          text: 'Value'
+        },
+        plotLines: [{
+          value: 0,
+          width: 1,
+          color: '#808080'
+        }]
+      },
+      tooltip: {
+        formatter: function() {
+          return '<b>'+ this.series.name +'</b><br/>'+
+            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +'<br/>'+ 
+            Highcharts.numberFormat(this.y, 2);
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      exporting: {
+        enabled: false
+      },
+      series: [{
+        name: 'Current data',
+        color: '#00aeff',
+        data: (function() {
+          var data = [],
+              time = (new Date()).getTime(),
+              i;
+          for (i = -19; i <= 0; i++) {
+            data.push({
+              x: time + i * 1000,
+              y: 0.92 + Math.random()/100.0*16
+            });
+          }
+          return data;
+        })()
+        
+      },{
+        name: 'Watt data',
+        color: '#a6ff00',
+        dataLabels: {
+          enabled: true,
+          color: '#000000',
+          connectorColor: '#000000',
+          formatter: function() {
+            return (this.y).toFixed(2);
+          }
+        },
+        data: (function() {
+          var data = [],
+              time = (new Date()).getTime(),
+              i;
+          for (i = -19; i <= 0; i++) {
+            data.push({
+              x: time + i * 1000,
+              y: 1+Math.random()/20.0
+            });
+          }
+          return data;
+        })()
+        
+      }]
+    });
+    
+  });
+});

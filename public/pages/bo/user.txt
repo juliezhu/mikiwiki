@@ -1,0 +1,1 @@
+<img src="@picture@" style="width:60px;"/><div><b><font class="Apple-style-span" size="4">@name@ </font></b>| <a href="skype:@skype@?call">call</a><div><em>@role@</em></div><div><br></div></div>

@@ -1,0 +1,6 @@
+[
+  [2,"M","T-shirt","red","demos/LocalizationDemo/images/red-ts.png","&#128; 32"],
+  [4,"S","Long sleeve","white","demos/LocalizationDemo/images/long-sleeve.png","&#128; 50"],
+  [1,"XL","T-shirt","green","demos/LocalizationDemo/images/green-tshirt.png","&#128; 29"]
+]
+  

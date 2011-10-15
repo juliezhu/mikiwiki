@@ -1,0 +1,1 @@
+[{"height":"78px","width":"333px","x":"325px","y":"83px","text":"How are you?"}]

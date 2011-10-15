@@ -1,0 +1,137 @@
+load_javascript("http://fitvidsjs.com/js/jquery.fitvids.js",function(){
+  
+  var stickynotes = nugget.data();
+  
+  var name_of_videonotes = 'notes-'+nugget.uniquename();
+  
+  nugget.$('.ui-resizable-se').css('bottom','17px');
+  
+  nugget.out( "<a href='#' id='savevideos'>Save Videos</a> " );
+  nugget.out( "<a href='#' id='add-videotag'>Add a Video</a> " );
+  nugget.out( "<div id='"+name_of_videonotes+"'></div>" );
+  nugget.setHTML();
+  
+  function videoEmbedHtml(url){
+    
+    var youtube_video = /youtube\.com/i;
+    var vimeo_video = /vimeo\.com/i;
+    
+    var template = '';
+    
+    if (url.match(youtube_video) != null)
+    {
+      
+      var videoID = /v=(.*)&/i;
+      var video_code = url.match(videoID)[1];
+      
+      template = '<div class="post"><iframe width="425" height="349" src="http://www.youtube.com/embed/'+video_code+'" frameborder="0" allowfullscreen></iframe></div>';
+      
+    }else if (url.match(vimeo_video)) {
+      
+      var videoID = /vimeo\.com\/(.*)/i;
+      var video_code = url.match(videoID)[1]; 
+      
+      template = '<div class="post"><iframe width="425" height="349" src="http://player.vimeo.com/video/'+video_code+'" frameborder="0" allowfullscreen></iframe></div>';
+      
+    }else{
+      template = '';
+    }
+    
+    return template;
+  }
+  
+  function addNote(obj){
+    var i = nugget.$("#"+name_of_videonotes+" .stickynote").size(); // get next available id
+    var myvideo = obj.video_id; 
+    
+    var note = nugget.$("<div id='stickynote-"+i+"' class='stickynote'></div>");
+    var handle = nugget.$("<div class='handle'> Drag Here <a class='delete-icon' href='#'>[X]</a></div>");
+    note.append(handle);
+    
+    var input_text = nugget.$("<input style='width:150px; display:block;'/>").val(myvideo);  
+    note.append(input_text);
+    
+    var video_note = nugget.$('<div class="video_note"></div>').append(
+      videoEmbedHtml(myvideo)
+    );
+    
+    note.append(video_note);
+    
+    note.find('.delete-icon').click(function(e){
+      $(e.target).parents('.stickynote').remove();
+    });
+    
+    note.find('.handle').css({
+      "background-color":'#000',
+      "color":"#fff",
+      "text-align":"center",
+      "font-size":"18px",
+      "cursor":"move",
+      "width":'150px',
+      "height":'25px',
+      "top":obj.y,
+      "left":obj.x,
+    });
+    
+    note.css({
+      "background-color":'#fff',
+      "opacity":'0.8',
+      "width":obj.width,
+      "height":obj.height,
+      "position":"absolute",
+      "left":obj.x,
+      "top":obj.y,
+      "padding":"5px"
+    });  
+    
+    
+    note.find('input').keypress(function(event) {
+      if ( event.which == 13 ) {
+        note.find('.video_note').html( videoEmbedHtml(note.find('input').val()) );
+      }
+    });
+    
+    
+    note.find(".video_note").css({
+      "width":obj.width
+    });
+    
+    note.draggable({handle:'.handle'});
+    note.resizable({handles:'se', alsoResize:note.find(".video_note")}); 
+    
+    nugget.$('#'+name_of_videonotes).append( note ); 
+    
+  }
+  
+  // Loading the stickynotes on the canvas
+  
+  for(var i=0; i<stickynotes.length; i++){
+    addNote( stickynotes[i] );
+  }
+  
+  $(".post").fitVids();
+  
+  var saveStickynotes = function(){
+    var all = [];
+    $("#"+name_of_videonotes+" .stickynote").each(function(index,note){
+      
+      all[index] = {
+        "height": $(this).css('height'), 
+        "width":$(this).css('width'), 
+        "x":$(this).css("left"), 
+        "y":$(this).css("top"), 
+        "video_id":$(this).find('input').val()
+      };
+    });
+    
+    nugget.updateJSON( all );
+    alert("your video tages have been saved!");
+  }
+      
+      nugget.$('#savevideos').click(saveStickynotes);
+  
+  nugget.$('#add-videotag').click(function(){
+    addNote({'width':'305px','height':'300px','text':"...", 'x':'200px','y':'200','video_id':'paste video id here!'});
+  });
+  
+});

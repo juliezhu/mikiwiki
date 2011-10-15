@@ -1,0 +1,60 @@
+/*
+loading lib
+
+<link rel="stylesheet" href="/css/WireIt.css" type="text/css" media="screen" charset="utf-8" />
+
+<script src='/javascript/WireIt.js' type="text/javascript"></script>
+<script src='/javascript/CanvasElement.js' type="text/javascript"></script>
+<script src='/javascript/Wire.js' type="text/javascript"></script>
+<script src='/javascript/Terminal.js' type="text/javascript"></script>
+<script src='/javascript/Anim.js' type="text/javascript"></script>
+
+<script src='/javascript/DD.js' type="text/javascript"></script>
+<script src='/javascript/DDResize.js' type="text/javascript"></script>
+<script src='/javascript/Container.js' type="text/javascript"></script>
+<script src='/javascript/Layer.js' type="text/javascript"></script>
+<script src='/javascript/Layout.js' type="text/javascript"></script>
+
+
+
+*/
+
+nugget.setHTML("<div class='canvas'></div>");
+
+nugget.$('.canvas').css({
+  'top':300, 
+  'width': 500,
+  'height': 500
+});
+  
+var layer = null;
+
+var data = nugget.data();
+var nodes = data.nodes;
+var wires = data.wires; 
+
+layer = new WireIt.Layer({className:"canvas"});
+
+for(var i = 0 ; i < nodes.length ; i++) {
+  var c = layer.addContainer({
+    terminals: [ { offsetPosition: {top: 5, left: 25}, editable: false }],
+    title: nodes[i],
+    position: [ Math.floor(Math.random()*800)+100, Math.floor(Math.random()*300)+300 ],
+    close: false
+  });
+}
+
+for(var i = 0 ; i < wires.length ; i++) {
+  var wc = wires[i];
+  layer.addWire({
+    src: {moduleId: wc[0], terminalId: 0},
+    tgt: {moduleId: wc[1], terminalId: 0},
+    drawingMethod: "straight"
+  });
+}
+
+layer.startDynamicLayout();
+
+$('.WireIt-Container').click(function(){alert(nodes[2]);});
+
+//$('.WireIt-Container').click(function(){alert("YO");});

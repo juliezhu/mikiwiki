@@ -1,0 +1,23 @@
+load_javascript("http://jquery-translate.googlecode.com/files/jquery.translate-1.4.7-debug-all.js",function(){ 
+  
+  nugget.out( "<div id='nav'></div>" );
+  nugget.setHTML();
+  
+  $.translate(function(){
+    $.translate().ui('select', 'option') 
+      .change(function(){
+        $('body').translate( 'en', { 
+          not: 'select, pre'
+        }).translate( 'en',  $(this).val(), 
+                      {
+                        not: 'select, pre',
+                        async:  true,
+                        toggle: true,
+                        walk: false
+                      });
+      }).val('English').appendTo('#nav'); 
+  });
+  
+  
+}); //loading
+

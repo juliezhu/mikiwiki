@@ -1,0 +1,2 @@
+<<energy_dynamic_update>>
+<div id="container" style="width: 630px; height: 400px; margin: 0 auto"></div>

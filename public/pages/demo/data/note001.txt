@@ -1,0 +1,1 @@
+[{"height":"110px","width":"150px","color":"yellow","x":"200px","y":"200px","text":"Naruto"},{"height":"110px","width":"150px","color":"rgb(166, 227, 252)","x":"441px","y":"48px","text":"Sasuki"}]

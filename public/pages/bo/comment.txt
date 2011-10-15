@@ -1,0 +1,31 @@
+var cs = nugget.data();
+
+nugget.out(  "<ul>" );
+
+for(var i=0; i<cs.length; i++){
+    nugget.out(  "<li>" + cs[i] +"</li>" );
+}
+
+nugget.out( "</ul>" );
+
+nugget.out(  "<form action='#'>" );
+nugget.out( "<input type='text' id='comment-input'>" );
+nugget.out( "<input type='submit' id='comment-submit' >" );
+nugget.out( "</form>" );
+
+nugget.setHTML();
+
+nugget.$('#comment-submit').click( function(){
+      cs[cs.length]=nugget.$('#comment-input').val();
+
+      nugget.afterUpdating = function(){
+             out = '';
+             for(var i=0; i<cs.length; i++){
+                out = out + "<li>" + cs[i] +"</li>";
+             }
+             nugget.$('ul').html(out);
+      };
+
+      nugget.updateJSON( cs );
+      return false;
+});

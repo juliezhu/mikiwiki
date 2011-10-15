@@ -1,0 +1,1 @@
+[{"image":"/pages/dev/iPad_mockup/icons/btn_impatto_ambientale.png","height":"102px","width":"102px","x":"222px","y":"232px","link_to":""}]

@@ -1,0 +1,28 @@
+load_javascript("http://jquery-translate.googlecode.com/files/jquery.translate-1.4.7-debug-all.js",function(){ 
+  
+  var outputLanguage = nugget.data()[0];
+  
+  nugget.setHTML("<span style='background-color:pink;'>..translating to "+outputLanguage+"..</span>");
+  
+  
+  $(document).ready(function(){
+    
+    setTimeout(function(){ 
+      
+      $('body').translateTextNodes(outputLanguage,{
+        complete: function(){
+          nugget.setHTML("<span style='background-color:pink;'>Autotranslated to "+outputLanguage+"</span>"); 
+        }
+      });
+      
+      $('body a').translate(outputLanguage);
+      $('body :button').translate(outputLanguage);
+      $('body :submit').translate(outputLanguage);
+      $("#sidebar_box").translate(outputLanguage);
+      
+    }, 2000);
+    
+  });
+  
+}); // loading
+

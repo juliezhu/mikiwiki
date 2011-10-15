@@ -1,0 +1,133 @@
+var stickynotes = nugget.data();
+
+$('.ui-resizable-se').css('bottom','17px');
+
+nugget.out( "<a href='#' id='savestickynotes'>Save Picture</a> " );
+nugget.out( "<a href='#' id='add-tag'>Add Tags</a> " );
+nugget.out( "<div id='canvas'></div>" );
+nugget.setHTML();
+
+
+function addNote(obj){
+  var i = $("#canvas .stickynote").size(); // get next available id
+  var note = $("<div id='stickynote-"+i+"' class='stickynote'></div>").append(  
+    $("<div class='handle'> Drag Here </div>").append(
+      $('<a/>').attr('href','#').text('[X]').click(function(e){
+        $(e.target).parents('.stickynote').remove(); 
+      })
+    )
+  ).append(
+    $("<text"+"area class='input_tags'></text"+"area>").
+    val(obj.text).
+    css('background-image',obj.url).
+    css('background-repeat','no-repeat').
+    css('margin-left','0.3px').
+    css("width", obj.width).
+    css("height", obj.height).
+    css("min-height", '40px').
+    css('font-size','21px').
+    css('font-family','Comic Sans MS')
+  ).
+    append(
+    $("<div class='thumbnails'></div>")
+  );
+
+  note.find('.handle').css({
+    "background-color":'#000',
+    "color":"#fff",
+    "text-align":"center",
+    "font-size":"18px",
+    "cursor":"move",
+    "width":'150px',
+    "height":'25px',
+    "top":obj.y,
+    "left":obj.x
+  });
+
+  note.css({
+    "background-color":'#fff',
+    "background-repeat":"no-repeat",
+    "opacity":'0.8',
+    "width":obj.width,
+    "height":obj.height+1,
+    "position":"absolute",
+    "left":obj.x,
+    "top":obj.y,
+    "padding":"5px"
+  });
+
+  note.find("textarea").typing({
+    start: function () {
+      LoadPhotos( note.find("textarea").val(), note.find('.thumbnails'),note.find("textarea"),note.find(".thumbnails") );
+    }
+  });
+  
+  note.find("textarea").click(function(){
+    note.find(".thumbnails").toggle();  
+  }); 
+  
+  note.draggable({handle:'.handle'});
+  note.resizable({handles:'se', alsoResize:note.find("textarea")});
+
+  $('#canvas').append( note );
+}
+
+// Loading the stickynotes on the canvas
+
+for(var i=0; i<stickynotes.length; i++){
+  addNote( stickynotes[i] );
+}
+
+var saveStickynotes = function(){
+  var all = [];
+  $("#canvas .stickynote").each(function(index,note){
+    
+    all[index] = {
+      "height": $(this).css('height'), 
+      "width":$(this).css('width'), 
+      "x":$(this).css("left"), 
+      "y":$(this).css("top"), 
+      "text":$(this).find('textarea').val(),
+      "url":$(this).find('textarea').css('background-image')
+    };
+  });
+  
+  nugget.updateJSON( all );
+  alert("your image tages have been saved!");
+}
+
+$('#savestickynotes').click(saveStickynotes);
+
+$('#add-tag').click(function(){
+  addNote({'width':'150px','height':'150px','text':"...", 'x':'200px','y':'200','url':'none'});
+});
+
+function LoadPhotos(tags,where,background,allpics) 
+{ 
+  $("#progress").show(); 
+  
+  var flickrUrl = "http://api.flickr.com/services/feeds/photos_public.gne?tags=" + 
+      tags + "&tagmode=any&format=json&jsoncallback=?"; 
+  
+  $.getJSON(flickrUrl, function(data){ 
+    where.empty(); 
+
+    $.each(data.items, function(i, item){ 
+      $("<img/>") 
+        .css({'margin':'3px', 'border':'1px solid black'}) 
+        .attr({ src: item.media.m, width: '60', height: '60', id: ('thumb' + i) })
+        .click(function(){ 
+          background.css({'background-image':'url(' + item.media.m + ')', 'background-repeat':'no-repeat'});
+          allpics.toggle();
+        })
+        .appendTo( where );
+      
+        if ( i == 9 ) return false;
+      
+    });
+    
+    $("#progress").hide(); 
+  }); 
+}
+
+

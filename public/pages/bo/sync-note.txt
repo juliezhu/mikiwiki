@@ -1,0 +1,249 @@
+nugget.setHTML("<div id='rtcanvas'></div>");
+
+var canvas = nugget.$('#rtcanvas');
+
+addThumbnail = function(username,jqelement){
+  Page('users/'+username).getJSON(function(user){
+    jqelement.append( 
+      "<img src='" + user.picture + "' title='"+username+"' style='width:20px; height:20px;  display:inline;margin:5px 5px 0px 5px; padding:0px;'/>"
+    );
+  }); 
+}
+
+// ADD BUTTON =====================================
+
+var add_button = $("<a href='#'>ADD ITEM</a>");
+
+add_button.click(function(){
+  nugget.sharedspace_add_item( {x:100, y:50, width:200, height:200, color:'yellow',text:"...", creator:nugget.username} );
+});
+
+add_button.mouseenter(function(){
+  add_button.css({'background-color':'#00bbff','color':'#fff'});
+}).mouseout(function(){
+  add_button.css({'background-color':'#fafafa','color':'#444'});
+});
+
+add_button.css({
+  'width':'100px',
+  'height':'25px',
+  'background-color':'#fafafa',
+  'text-align':'center',
+  'font-weight':'bold',
+  'padding':'5px',
+  '-moz-border-radius': '5px',
+  '-webkit-border-radius': '5px',
+  '-khtml-border-radius': '5px',
+  '-webkit-box-shadow':'#CCCCCC 1px 1px 1px' 
+});
+
+add_button.appendTo(canvas);
+
+// ==============================================
+
+nugget.canvas_delete_item = function(id){
+  canvas.find('#'+id).remove();
+};
+
+
+nugget.canvas_add_item = function(cfg){
+  var newitem = $("<div class='note'></div>");
+  
+  newitem.css({
+    position:"absolute",
+    left: cfg.x,
+    top: cfg.y,
+    width: cfg.width,
+    height: cfg.height,
+    backgroundColor: cfg.color,
+    opacity:0.8,
+    text: cfg.text
+  }).attr({
+    id: cfg.id,
+    title: cfg.id
+  });
+  
+  // ----- TITLE BAR ---------
+  
+  var title_bar = $("<div><b><span></span></b>"+cfg.creator+"</div> ");
+
+  title_bar.css({
+    "color":"#444",
+    "font-size":"15px",
+    "cursor":"move",
+    "width":"100%",
+    "height":'25px',
+    "padding-bottom":"5px"
+  });
+  
+  addThumbnail(cfg.creator, title_bar.find('span'));
+  
+  newitem.append(title_bar);
+
+  // ----- DELETE BUTTON ---------
+  var delete_button = $("<div class='delete-btn'>[X]</div>");
+  
+  delete_button.css({
+    'float':'right',    
+    'padding':'10px 10px 0 0', 
+  });
+  
+  delete_button.click(function(){
+    nugget.sharedspace_delete_item(cfg.id);
+  });
+
+  delete_button.appendTo(title_bar);
+  
+  // ----- TEXT AREA ---------
+  
+  var input_text = $("<text"+"area>"+cfg.text+"</text"+"area>").
+      css('background-color',cfg.color).
+      css('margin-left','0.1px').
+      css('margin-top','-0.3px').
+      css('resize','none').
+      css("width",'100%').
+      css("height",cfg.height-55).
+      css('font-size','18px').
+      css('font-family','Comic Sans MS'); 
+  
+
+  input_text.typing({
+    delay: 500,
+    stop: function(){
+      var obj = nugget.item(cfg.id);
+      obj.text = input_text.val();
+      nugget.sharedspace_update_item(obj);       
+    }
+  });
+  
+  newitem.append(input_text);
+
+  // ----- COLOR PICKER ---------
+
+  var color_picker = $("<div class='colorpicker-bar'></div>");
+
+  var pink_pick = $("<div class='colorpick pink'></div>");
+  pink_pick.css({
+    'background-color':'#FaD',
+    'border':'1px solid #F8D'  
+  });
+  pink_pick.appendTo(color_picker);
+  
+  var blue_pick = $("<div class='colorpick blue'></div>");
+  blue_pick.css({
+    'background-color':'#A6E3FC',
+    'border':'1px solid #75C5E7'  
+  });
+  blue_pick.appendTo(color_picker);
+  
+  var green_pick = $("<div class='colorpick green'></div>");
+  green_pick.css({
+    'background-color':'#A5F88B',
+    'border':'1px solid #98E775'  
+  });
+  green_pick.appendTo(color_picker);
+  
+  var orange_pick = $("<div class='colorpick orange'></div>");
+  orange_pick.css({
+    'background-color':'#fff6b8',
+    'border':'1px solid #ffd500'  
+  });
+  orange_pick.appendTo(color_picker);
+  
+  var grey_pick = $("<div class='colorpick grey'></div>");
+  grey_pick.css({
+    'background-color':'#f7f7f7',
+    'border':'1px solid #b8b8b8'  
+  });
+  grey_pick.appendTo(color_picker);
+  
+  color_picker.css({
+    height: 20
+  });
+  newitem.append(color_picker);  
+  
+  newitem.find('.colorpick').css({
+    'cursor':'pointer',
+    'float':'left',
+    'height':'10px',
+    'margin':'3px 0px 0px 5px',
+    'width':'10px'
+  });
+  
+  newitem.find('.colorpick').click(function(){ 
+    var picked_color = $(this).css('background-color');
+    var obj = nugget.item(cfg.id);
+    obj.color = picked_color;
+    nugget.sharedspace_update_item(obj); 
+  });
+  
+  // ----------- DRAGGABLE -----------
+  newitem.draggable({ 
+    stack: '.note',
+    stop: function(event, ui) { 
+      var obj = nugget.item(cfg.id);
+      obj.x = ui.position.left;
+      obj.y = ui.position.top;
+      nugget.sharedspace_update_item(obj); 
+    }
+  });
+  
+  // ----------- RESIZABLE -----------
+  
+  newitem.resizable({ 
+    stop: function(event, ui) { 
+      var obj = nugget.item(cfg.id);
+      obj.width = ui.size.width;
+      obj.height = ui.size.height;
+      nugget.sharedspace_update_item(obj); 
+    }
+  });
+ 
+  newitem.appendTo(canvas);
+}
+ 
+nugget.canvas_update_item = function(obj){
+  var item = canvas.find('#'+obj.id);
+  
+  var username = obj.update.username;
+  var agent_label; 
+  
+  item.find('textarea').val(obj.text);
+  item.find('textarea').css({
+    backgroundColor: obj.color,
+    height: obj.height-55
+  });
+  
+  var new_css = {
+    left: obj.x,
+    top: obj.y,
+    width: obj.width,
+    height: obj.height,
+    backgroundColor: obj.color
+  };
+  
+  // do not animate for the user making the change
+  if (username == nugget.username){
+    item.css(new_css);  
+  }else{
+    
+    Page('users/'+username).getJSON(function(user){
+      agent_label = $("<img src='" + user.picture + "' class='authorbar' title='"+username+"' style='width:50px; height:50px; opacity:0.8; margin:0px 5px 0px 5px; padding:0px;'></img>");
+      
+      agent_label.css({
+        position:'absolute',
+        top: 0,
+        left: 0
+      });
+      
+      agent_label.appendTo( item.find('.colorpicker-bar' ) );
+    });  
+    
+    item.animate(new_css,1500,function(){
+      agent_label.remove();
+    });  
+  }
+  
+};
+
+nugget.realtimeSynchEvery(2000);

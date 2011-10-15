@@ -1,0 +1,8 @@
+--- 
+allow: 
+  readwrite: 
+  - designer
+  readonly: 
+format: miki
+update: 2011-09-09 01:15:06.660784 -07:00
+user: julie

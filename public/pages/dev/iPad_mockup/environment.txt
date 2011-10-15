@@ -1,0 +1,1 @@
+<script> $('body').css('background-color','#fff'); $('.content').css('-webkit-box-shadow','none'); $('.content').css('box-shadow','none'); </script><div><br></div><div>Using script to change the body background color and remove the content box-shadow. Press edit to see <a href="http://www.mikiwiki.aqalert.net/demos/iPad_mockup/environment/edit">more detail</a></div>

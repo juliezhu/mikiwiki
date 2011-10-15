@@ -1,0 +1,5 @@
+var file_url = nugget.data();
+
+nugget.out('<iframe src="http://docs.google.com/gview?url='+file_url+'&embedded=true" style="width:800px; height:500px;" frameborder="0"></iframe>');
+
+nugget.setHTML();

@@ -1,0 +1,61 @@
+load_javascript("http://node-radiovis.googlecode.com/svn-history/r2/trunk/node-radiovis/js/jquery.editable-1.3.3.min.js",function(){
+  var text_content = nugget.data()[0];
+  
+  // if there's no data page yet
+  if (text_content ==  null){
+    nugget.out( '<div id="input_textArea"><div class="editable">Click to Edit</div></div>' );
+  }
+  else{
+    nugget.out( '<div id="input_textArea"><div class="editable">'+text_content.text+'</div></div>' );
+  }
+  
+  nugget.setHTML();
+  
+  nugget.$(".editable").editable({ 
+    type:'textarea',  
+    submit:'save',
+    cancel:'cancel',
+    onSubmit:end
+  }); 
+  
+  nugget.$("#input_textArea" ).css({
+    'background-color':'#fff',
+    'border':'1 solid #eee',
+    'text-align':'center',
+    'padding':'2px',
+    'min-width':'100px',
+    'min-height':'100px',
+    '-moz-border-radius': '5px',
+    '-webkit-border-radius': '5px',
+    '-khtml-border-radius': '5px',
+    '-webkit-box-shadow':'#CCCCCC 4px 4px 4px'
+  });
+  
+  nugget.$( "#input_textArea").
+    css("width",text_content.width).
+    css("height",text_content.height).
+    css("left",text_content.x).
+    css("top",text_content.y);
+  
+  nugget.$( "#input_textArea").draggable().resizable();
+  
+  function end(content){
+    this; //this is the current jQuery object
+    alert(content.current+':'+content.previous);
+    
+    var all = [];
+    
+    nugget.$("#input_textArea").each(function(index){
+      all[index] = {
+        "height": $(this).css('height'), 
+        "width":$(this).css('width'), 
+        "x":$(this).css("left"), 
+        "y":$(this).css("top"), 
+        "text": content.current
+      };
+    });
+    
+    nugget.updateJSON( all );
+  } 
+  
+}); // loading

@@ -1,0 +1,38 @@
+//load_css("http://miki.aqalert.net/css/jquery.tagit.css");
+
+//load_javascript("http://aehlke.github.com/tag-it/js/tag-it.js",function(){ 
+    
+  nugget.out('<ul id="myULTags"></ul>');
+  nugget.out( "<a href='#' id='saveTags'>Save Tags</a> " );
+  nugget.setHTML();
+  
+  $(function(){
+    var tags = nugget.data();
+    
+    for(i=0; i<tags.length;i++){
+      nugget.$('#myULTags').append('<li>'+tags[i]+'</li>');
+    }
+    
+    var sampleTags = ["wiki", "javascript", "ruby", "jason", "page", "research", "design", "eud", "meta-design", "culture of participation", "programming", "co-evolution", "creativity","collaboration","community"];
+    
+    $('#myULTags').tagit({
+      availableTags: sampleTags
+    }); 
+    
+    var savetags = function(){
+      var all = [];
+      nugget.$('#myULTags li').each(function(index, tag){
+        
+        strLen = $(this).text().length;
+        all[index] = $(this).text().slice(0,strLen-1);;  
+        
+      });
+      
+      nugget.updateJSON( all );
+    }
+        
+        nugget.$('#saveTags').click(savetags);
+    
+  });
+  
+//}); //js loading

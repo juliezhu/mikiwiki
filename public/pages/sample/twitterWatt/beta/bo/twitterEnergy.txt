@@ -1,0 +1,36 @@
+ $.getJSON(nugget.data()[0],function(data){   
+  nugget.out("<table><tr><th>Watt</th><th>Wh</th><th>Pre_Wh</th></tr>");   
+  $.each(data, function(i,item){
+    var watts = item.text.split(' ')[2];
+    var Wh = item.text.split(' ')[4];
+    var pre_Wh = item.text.split(' ')[9];
+    nugget.out("<tr><td>"+ watts +"</td><td>"+ Wh +"</td><td>"+ pre_Wh+"</td></tr>");
+  });
+  nugget.out( "</table>");
+  nugget.setHTML();
+   
+  $('table').css({
+    'width':'400px',
+    'border':'1px solid grey',
+    'text-align':'center'
+  });
+   
+  $('td').css({
+    'border':'1px solid grey',
+    'text-align':'center'
+  }); 
+   
+  $('tr:even').css({
+    'background-color':'lightpink',
+    'text-align':'center'
+  }); 
+   
+  $('th').css({
+    'background-color':'#eee',
+    'border':'1px solid grey',
+    'text-align':'center',
+    'height':'30px'
+  }); 
+
+}); 
+  

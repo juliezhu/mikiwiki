@@ -1,0 +1,28 @@
+// {'username':{'time','value'} }
+//
+load_css("http://miki.aqalert.net/javascript/star-rating/jquery.rating.css");
+load_javascript("http://jquery-star-rating-plugin.googlecode.com/svn/trunk/jquery.rating.js",function(){
+  
+  var votes = nugget.data('{}');
+  
+  nugget.out( '<table>' );
+  nugget.out( '<thead><tr>' );
+  nugget.out( '<th>user</th><th>vote</th><th>when</th>' );
+  nugget.out( '</tr></thead>' );
+  nugget.out( '<tbody>' );
+  
+  for (var key in votes ){
+    nugget.out( '<tr>' );
+    
+    nugget.out( '<td>'+key+'</td>' );
+    nugget.out( '<td>'+votes[key].value+'</td>' );
+    nugget.out( '<td>'+votes[key].time+'</td>' );
+    nugget.out( '</tr>' );
+  }
+  
+  nugget.out( '</tbody>' );
+  nugget.out( '</table>' );
+  
+  nugget.setHTML();
+  
+});

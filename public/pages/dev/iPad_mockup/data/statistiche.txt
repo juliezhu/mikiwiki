@@ -1,0 +1,2 @@
+<<statistiche-old>>
+<<statistiche-panels as ipadfloatpages>>
