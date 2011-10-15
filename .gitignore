@@ -1,6 +1,6 @@
 
 # ignore the log files directory
-/data
+/data/**/*
 
 # ignore wiki folder for local storage (videos & heavy stuff)
 /public/pages/local/**/*
@@ -9,6 +9,6 @@
 __*
 
 # IGNORE all stuff under /users, after having added admin user
-# /public/pages/users/**/*
+/public/pages/users/**/*
 
 

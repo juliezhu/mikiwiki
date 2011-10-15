@@ -186,7 +186,7 @@ post '/login' do
     private_profile = private_page.json(username())
     profile = page.json(username())
     
-    if private_profile['password'] == params[:password]
+    if private_profile['password'] == params[:password] and private_profile['password'] != ''
       log username(), request, params, page, 'login_ok'
       session[:user] = profile
       session[:user]['role'] = private_profile['role']
