@@ -13,6 +13,7 @@ Your admin username is 'admin' and the password is 'admin'.
 I advise you to change the password by editing the users/private/admin page.
 
 You run mikiwiki by doing:
+
 > ruby mikiwiki.rb
 
 
@@ -44,17 +45,20 @@ Some Syntax
 ===========
 
 [[a_page_name]] - links to a page
+
 [[include:a_page_name]] - imports a page
+
 [[expand:a_page_name]] - creates an expandable link to a page
 
 *some text* - makes the text bold
 
-<<a_nugget_name>> - imports a nugget
+\<\<a_nugget_name\>\> - imports a nugget
 
-<<a_nugget_name: some_nugget_data>> - passes some configuration information to a nugget
-<<a_nugget_name: {"this is":"some JSON"}>> - passes some configuration information to a nugget as JSON data
+\<\<a_nugget_name: some_nugget_data\>\> - passes some configuration information to a nugget
 
-<<a_nugget_name as a_format>> - imports a nugget and ovverides its format
+\<\<a_nugget_name: {"this is":"some JSON"}\>\> - passes some configuration information to a nugget as JSON data
+
+\<\<a_nugget_name as a_format\>\> - imports a nugget and ovverides its format
 
 
 New Users
