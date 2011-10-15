@@ -712,12 +712,12 @@ __END__
  <div id="intro" class="grid_11 push_1">
     <div class="grid_5">
        <li><img class='login_icon' src="/siteImages/sites.png"><h4>Create your own evironments</h4>
-         <p>MikiWiki allows you to create your own environment, use your own language, own CSS and more</p>
+         <p>MikiWiki allows you to create your own environment, use your own language and more</p>
       </li>
     </div>
     <div class="grid_5">    
      <li><img  class='login_icon' src="/siteImages/group.png"><h4>Collaborate and Communicate with Others</h4>
-       <p>MikiWiki comes with a set of handy nuggets for communication and coordination, which are crucial for collaboration</p>
+       <p>MikiWiki comes with a set of handy nuggets for communication and coordination</p>
     </li>
     </div>
   </div>  
@@ -725,13 +725,13 @@ __END__
   <div id="intro" class="grid_11 push_1">
     <div class="grid_5">   
      <li><img  class='login_icon' src="/siteImages/ideas.png"><h4>Share and Organize your Creative Ideas</h4>
-       <p>You can create your own Post-its, multi-media notes or sketch your brillant ideas and share with your teammates</p> 
+       <p>You can create your own Post-its, multi-media notes or sketch your brillant ideas and share them with your teammates</p> 
       </li>    
     </div>
 
     <div class="grid_5">
      <li><img class='login_icon'  src="/siteImages/rank.png"><h4>Tinker nuggets</h4>
-       <p>Nuggets are ready-made objects, which make collaboration more fun and more exploratory</p> 
+       <p>Nuggets are ready-made objects, which make collaboration more fun and exploratory</p> 
     </li>
     </div>
   </div>  
@@ -739,8 +739,8 @@ __END__
   <div id="intro" class="grid_11 push_1">
 
     <div class="grid_5">   
-     <li><img class='login_icon'  src="/siteImages/code.png"><h4>Simple API for Advanced Users</h4>
-      <p>Nuggets are executable JavaScript, which can be tinkered and tailored. We also provide simple API for advanced users to create their own mikinuggets</p>
+     <li><img class='login_icon'  src="/siteImages/code.png"><h4>API for Advanced Users</h4>
+      <p>Nuggets are executable JavaScript, which can be tinkered and tailored. We also provide an API for advanced users to create their own mikinuggets</p>
      </li>
     </div>
  
@@ -790,33 +790,33 @@ __END__
    </div>  
 
    <div id="intro" class="grid_11 push_1">
-     <div class="grid_5">   
-      <li><img  class='login_icon' src="/siteImages/ideas.png"><h4>Share and Organize your Creative Ideas</h4>
-        <p>You can create your own Post-its, multi-media notes or sketch your brillant ideas and share with your teammates</p> 
-       </li>    
-     </div>
+      <div class="grid_5">   
+       <li><img  class='login_icon' src="/siteImages/ideas.png"><h4>Share and Organize your Creative Ideas</h4>
+         <p>You can create your own Post-its, multi-media notes or sketch your brillant ideas and share them with your teammates</p> 
+        </li>    
+      </div>
 
-     <div class="grid_5">
-      <li><img class='login_icon'  src="/siteImages/rank.png"><h4>Tinker mikinuggets</h4>
-        <p>Nuggets are ready-made objects, which make collaboration more fun and more exploratory</p> 
-     </li>
-     </div>
-   </div>  
-
-   <div id="intro" class="grid_11 push_1">
-
-     <div class="grid_5">   
-      <li><img class='login_icon'  src="/siteImages/code.png"><h4>Simple API for Advanced Users</h4>
-       <p>Nuggets are executable JavaScript, which can be tinkered and tailored. We also provide simple API for advanced users to create their own mikinuggets</p>
+      <div class="grid_5">
+       <li><img class='login_icon'  src="/siteImages/rank.png"><h4>Tinker nuggets</h4>
+         <p>Nuggets are ready-made objects, which make collaboration more fun and exploratory</p> 
       </li>
-     </div>
+      </div>
+    </div>  
 
-     <div class="grid_5">    
-      <li><img class='login_icon' src="/siteImages/library.png"><h4>Design along the way</h4>
-        <p>MikiWiki can be evolved along your collaboration. You can tailor it at any point, and the more you use it the more effiecient it will be...</p> 
-     </li>     
-     </div>
-  </div>
+    <div id="intro" class="grid_11 push_1">
+
+      <div class="grid_5">   
+       <li><img class='login_icon'  src="/siteImages/code.png"><h4>API for Advanced Users</h4>
+        <p>Nuggets are executable JavaScript, which can be tinkered and tailored. We also provide an API for advanced users to create their own mikinuggets</p>
+       </li>
+      </div>
+
+      <div class="grid_5">    
+       <li><img class='login_icon' src="/siteImages/library.png"><h4>Design along the way</h4>
+         <p>MikiWiki can be evolved along your collaboration. You can tailor it at any point, and the more you use it the more effiecient it will be...</p> 
+      </li>     
+      </div>
+   </div>
   
 </div>
 
