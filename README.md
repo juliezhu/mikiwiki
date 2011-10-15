@@ -50,7 +50,7 @@ Some Syntax
 
 [[expand:a_page_name]] - creates an expandable link to a page
 
-*some text* - makes the text bold
+\*some text\* - makes the text bold
 
 \<\<a_nugget_name\>\> - imports a nugget
 
