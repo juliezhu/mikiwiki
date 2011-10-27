@@ -199,12 +199,6 @@ post '/login' do
   redirect '/login'
 end
 
-post '/tag' do
-  # get page name from params
-  # get list of tags from params
-  # write tags to metadata   
-end
-
 get '/search' do
   @page = Page.get('')
 
@@ -327,7 +321,7 @@ post '/*/edit' do
     redirect "/#{params[:title]}?changed=renamed&oldname=#{oldname}"
   else
     log username(), request, params, @page, 'update'
-      @page.update params[:format], username(), params[:body]
+    @page.update params[:format], username(), params[:body]
     redirect "/#{@page.name}?changed=saved"
   end  
 end
@@ -354,6 +348,13 @@ post '/*/edit_and_continue' do
   end  
 end
 
+post '/*/savetags' do
+  @page = authenticate_page params, 'update'
+  
+  @page.update_tags! params[:tags]
+  
+  return "Saved tags to metadata"
+end
 
 post '/*/realtime-action' do
   @page = authenticate_page params, 'update'
@@ -461,7 +462,7 @@ post '*/upload' do
 
     new_page = @page.child(name)
 
-    new_page.upload_resource( tmpfile.read )
+    new_page.upload_resource( tmpfile.read, username() )
     
     redirect "#{new_page.name}"    
 end
@@ -626,10 +627,6 @@ __END__
     <script src="/javascript/jquery.cleditor.table.min.js" type="text/javascript"></script>
     <script src="/javascript/jquery.cleditor.bo.js" type="text/javascript"></script>
     
-    
-    <link rel="stylesheet" href="/css/jquery.tagit.css" type="text/css" media="screen" charset="utf-8" />
-    <script src="/javascript/tag-it.js"></script>
-        
   </head>
   <body>
 

@@ -142,24 +142,22 @@ class Page
   end
   
   def metadata
-    # puts "LOADING METADATA PAGE: #{self.name}"
-    # puts @pagemetadata.path
-    # puts File.read(@pagemetadata.path)
-    # puts YAML.load( File.read(@pagemetadata.path) )
-
     YAML.load( File.read(@pagemetadata.path) )
   rescue
-    puts "No metadata found"
+    # puts "No metadata found"
     raise :no_metadata_found
   end
+
+  def has_metadata?
+    puts "$$$$$$$$$$$$ CHECKING #{@pagemetadata.path}"
+    puts (not @pagemetadata.is_new)
+    puts "$$$$$$$$$$$$$$$"
+    
+    return (not @pagemetadata.is_new)
+  end
+  # tags: xxxx,yyyy,zzzz
       
   def timestamp
-    # puts "6666666666666666666666"
-    # puts self.metadata['update']    
-    # puts "-----"
-    # puts self.metadata['update'].to_f    
-    # puts "6666666666666666666666"
-    
     return self.metadata['update'].to_f    
   end
   
@@ -416,36 +414,39 @@ public
   end
   
   def update format, username, content
-    # puts "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-    # p format
-    # p username
-    # p content
+    if has_metadata?
+      previous_metadata = metadata()
+    else
+      previous_metadata = { }
+    end
     
     add_to_history! unless is_new? or is_history?
 
-    # p "SAVING!!!"
     @pagefile.content = content if content
     
-    # push tags into meta-data from here?!
-    @pagemetadata.content = YAML.dump( {'format'=>format,'update'=>Time.now, 'user' => username} )
-    # p "SAVED!!!"
-    # p @pagefile
-    # p File.read(@pagefilecontent.path)
+    previous_metadata['format'] = format
+    previous_metadata['user'] = username
+    
+    update_metadata! previous_metadata
   self end
+  
+  def update_metadata! new_metadata
+    new_metadata['update'] = Time.now
+    
+    @pagemetadata.content = YAML.dump(new_metadata)
+  end
+
+  def update_tags! tags
+    current_metadata = metadata()
+    current_metadata['tags'] = tags
+    
+    @pagemetadata.content = YAML.dump(current_metadata)
+  end
 
   ######### HISTORY ################################################################## 
 
 private
   def add_to_history!
-    # puts "@@@@@@@@@@@@@ add_to_history! START"
-    # puts has_history_folder?
-    # puts history_folder()
-    # puts history_folder().fullname_plus_base
-    # puts next_version_name
-    # puts history_folder().child( next_version_name() ).inspect
-    # puts history_folder().child( next_version_name() ).name
-    # puts "@@@@@@@@@@@@@ add_to_history! END"
-    
     create_history_folder! unless has_history_folder?
     
     self.rename history_folder().child( next_version_name() ).name 
@@ -480,10 +481,6 @@ private
   
 public
   
-  def update_metadata! 
-    @pagemetadata.content = YAML.dump( {'format'=>( is_text? ? format() : @ext ),'update'=>Time.now} )
-  end
-  
   def delete
     # instead of deleting... historicize
     
@@ -504,10 +501,12 @@ public
     end
   end
 
-  def upload_resource( bytestream )
+  def upload_resource( bytestream, username )
     File.open(self.fullname_plus_base, "wb") { |f| f.write(bytestream) }
 
-    self.update_metadata!
+    resource_format = is_text? ? format() : @ext
+
+    self.update_metadata! 'format'=>resource_format, 'user'=>username
   self end
 
  

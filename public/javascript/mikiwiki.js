@@ -24,14 +24,29 @@ function  load_javascript(url, callback){
 }
 
 function load_css(url){
+	
+	var final_url;
+	
+	if( is_local_url(url) ){
+		final_url = "/"+url+"?nolayout=y";
+	}	
+	else{	
+		final_url = url;
+	}
+	
 	$("head").append("<link>");
-    css = $("head").children(":last");
-    css.attr({
-      rel:  "stylesheet",
-      type: "text/css",
-      href: url
-    });
+	css = $("head").children(":last");
+	css.attr({
+	  rel:  "stylesheet",
+	  type: "text/css",
+	  href: final_url
+	});
 }
+
+function is_local_url(url){
+	return url.toLowerCase().indexOf("http://") != 0 && url.toLowerCase().indexOf("https://") != 0;
+}
+
 
 function currentPageName(){
   return $(".pagebody").attr("pagename");
@@ -126,6 +141,7 @@ function Page(pagename){
 		appendsynchURL:    function(){ return '/'+this.pagename+'/append'; },
 		synchronizeURL:    function(){ return '/'+this.pagename+'/synchronize'; },
 		realtimesynchURL:  function(){ return '/'+this.pagename+'/realtime-synch'; },
+		savetagsURL: 	   function(){ return '/'+this.pagename+'/savetags'; },	
 		subpagesURL:       function(){ return '/'+this.pagename+'?listsubpages=y'; },
 	    
 		html_link: 	       function(){ return "<a href='"+this.URL()+"'>"+this.pagename+"</a>" }, 
@@ -238,7 +254,24 @@ function Page(pagename){
 		      success: function(metadata){ loadedCb( JSON.parse(metadata) )}
 		    });
 		},
+		
+		loadTags: function(loadedCb){
+			this.loadMetadata(function(md){ 
+			    loadedCb( md.tags.split(',') );
+			});			
+		},
 
+		saveTags: function(tags,cbUpdatedPage){
+			$.post(
+				this.savetagsURL(),
+			    [
+			       {name:'tags',value:tags} 
+			    ],
+				cbUpdatedPage,
+			    'text'
+			);
+		},
+		
 		update: function(formatpagename,body,cbUpdatedPage){
 			$.post(
 				this.editURL(),
@@ -309,6 +342,9 @@ function Nugget(modeldata,username,version,pagename,formatpagename,processPageFu
 		page: Page(pagename),
 		formatpagename: formatpagename,
 		codepagename: codepagename,
+		topPage: function(){
+			return Page( this.topenvelopePagename() ); 
+		},
 		id: id,
 		uniquename: function(){ return this.id.substr(1,this.id.length-1) },
 		generate_uniqid: function(){ return this.username + "-" + new Date().getTime() },
