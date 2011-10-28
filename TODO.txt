@@ -1,6 +1,5 @@
 Bugs
 
-- sync-data page, auto creation: { }
 - log files break. use ruby logger and hope.
 - put  post "/energypush"  to separate module
 - history nugget: if no history, should alert!!!

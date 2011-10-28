@@ -335,7 +335,14 @@ post '/*/realtime-action' do
   @page = authenticate_page params, 'update'
 
   command = JSON.parse(params['data'])
-  pagedata = JSON.parse( @page.raw(username()) )
+
+  page_raw_data = @page.raw(username())
+
+  if page_raw_data.strip == ''
+    pagedata = { }
+  else
+    pagedata = JSON.parse( page_raw_data )
+  end
   
   if command['action'] == 'create' or command['action'] == 'update'
     pagedata[command['item']['id']] = command['item']
