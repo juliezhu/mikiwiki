@@ -286,9 +286,13 @@ post '/*/edit' do
       @page.rename params[:title]  
     else
       log username(), request, params, @page, 'update_rename'
-      @page.real_delete if not @page.name == params[:title]
-      @page = Page.update params[:title], params[:format], username(), params[:body]
+      @page.rename params[:title]  
+      
+      # why did i do this stuff here... ?
+      # @page.real_delete if not @page.name == params[:title]
+      # @page = Page.update params[:title], params[:format], username(), params[:body]
     end
+    
     redirect "/#{params[:title]}?changed=renamed&oldname=#{oldname}"
   else
     log username(), request, params, @page, 'update'

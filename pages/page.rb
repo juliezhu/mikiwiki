@@ -408,8 +408,8 @@ public
     
     if not is_directory? # then copy metadata too
       FileUtils.cp_r original_page.full_metadata_filepath, self.full_metadata_filepath
-    end 
-       
+    end   
+         
   self end
   
   def make_folder!
