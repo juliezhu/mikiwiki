@@ -362,9 +362,16 @@ function Nugget(modeldata,username,version,pagename,formatpagename,processPageFu
 		},
 		CodePage: function(){ return this.isDataPage() ? Page(this.codepagename) : Page(this.formatpagename) },
 
+		// _default_data: null,
+		// 
+		// setDefaultData: function(defaultdata){
+		// 	this._default_data = defaultdata;
+		// },
+		// 
+		
 		data: function(defaultdata){
 			if (this.raw == '' && this.extension_text == ''){
-				return datadecode( (defaultdata || "[ ]"), "" )
+				return datadecode( (defaultdata || this._default_data || "[ ]"), "" )
 			}else{
 				return datadecode(this.raw,this.extension_text);
 			}

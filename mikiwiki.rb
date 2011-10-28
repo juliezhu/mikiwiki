@@ -392,9 +392,16 @@ post '/*/append' do
   @page = authenticate_page params, 'update'
   log username(), request, params, @page, 'update', 'ajax'
 
-  pagedata = JSON.parse( @page.raw(username()) )
+  page_raw_data = @page.raw(username())
+  
+  if page_raw_data.strip == ''
+    pagedata = [ ]
+  else
+    pagedata = JSON.parse( page_raw_data )
+  end
+  
   newdata  = JSON.parse( params[:data] )
-
+  
   pagedata << newdata
 
   @page.set_content JSON.dump( pagedata ), username()

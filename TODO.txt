@@ -1,0 +1,16 @@
+Bugs
+
+- sync-data page, auto creation: { }
+- log files break. use ruby logger and hope.
+- put  post "/energypush"  to separate module
+- history nugget: if no history, should alert!!!
+- check allow nugget r+ w+
+- BO folder access permission for admins/metadesigners only
+- history data page doesn't show
+- should be able to embed the pdf without using include
+- render datapage doesn't work if it has singlequote.. al data is passed as a string in the code!!!
+
+Features
+
+- in-place editing
+- navigation page linking, iPad case

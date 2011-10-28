@@ -69,6 +69,8 @@ nugget.out( " <input type='submit' id='comment-submit'/>" );
 nugget.out( "</form>" );
 nugget.setHTML();
 
+//nugget.setDefaultData('[]');
+
 nugget.afterUpdating = function(commentlist){
   displayChat(commentlist,15); //max 8 comments
 };
