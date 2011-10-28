@@ -1,0 +1,5 @@
+--- 
+format: miki
+tags: javascript
+update: 2011-10-28 01:55:59.100703 +02:00
+user: admin

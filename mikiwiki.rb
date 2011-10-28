@@ -687,6 +687,14 @@ __END__
           return true;
         });
       </script>
+      
+      <script type="text/javascript">
+        $("#search-button").click(function(){
+          window.location.href = "/search?keyword="+$('#search_tag').val();
+          return true;
+        });
+      </script>
+      
 </body>
 </html> 
 
@@ -899,12 +907,6 @@ You don't have the authorization to access this resource
                 <input type='text' id="search_tag" size=20 />
               </span>             
             </li>
-            <script type="text/javascript">
-              $("#search-button").click(function(){
-                window.location.href = "/search?keyword="+$('#search_tag').val();
-                return true;
-              });
-            </script>
             
             <li>
               <span id="upload_icon"><img src="/siteImages/upload.png"><b>Upload image</b></span>

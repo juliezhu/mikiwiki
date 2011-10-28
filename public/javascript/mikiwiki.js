@@ -257,7 +257,11 @@ function Page(pagename){
 		
 		loadTags: function(loadedCb){
 			this.loadMetadata(function(md){ 
-			    loadedCb( md.tags.split(',') );
+				if ("tags" in md){
+				    loadedCb( md.tags.split(',') );
+				}else{
+					loadedCb( [ ] );
+				}
 			});			
 		},
 
