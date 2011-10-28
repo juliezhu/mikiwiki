@@ -35,6 +35,8 @@ require 'services/authentication'
 # @metadata_filename      : foo/bar.png_metadata.txt
 # @full_metadata_filepath : public/pages/foo/bar.png_metadata.txt
 
+
+
 class Page
 
   @@resources_basedir = 'public'
@@ -403,6 +405,11 @@ public
   
   def clone_from original_page
     FileUtils.cp_r original_page.fullname_plus_base, self.fullname_plus_base
+    
+    if not is_directory? # then copy metadata too
+      FileUtils.cp_r original_page.full_metadata_filepath, self.full_metadata_filepath
+    end 
+       
   self end
   
   def make_folder!

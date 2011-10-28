@@ -14,46 +14,10 @@ require 'services/search'
 enable :static
 enable :sessions
 
-$LOGGING = true
+$LOGGING = true # for the logger in utils.rb
 
-def log username, request, params, page, action, is_ajax=nil
 
-  return if not $LOGGING
-
-  logfilepath = 'data/user-logs.txt'
-  
-  datetime = Time.now
-  user = username
-
-  if page.environment
-    environment = page.environment.name
-    environment = "ROOT" if environment == '' 
-  else
-    environment = "ROOT"
-  end
-  
-  pagename = page.name
-  format = page.format # SHOULD create special format if it is a directory!
-  path = request.path_info
-  fullpath = request.fullpath
-
-  if fullpath.include? '?'
-    query = fullpath.split('?')[1..-1].join
-  else
-    query = ''
-  end
-
-  action_type = action
-  call_type = is_ajax ? 'ajax' : 'page'
-
-  log_txt = "#{datetime}|#{user}|#{environment}|#{pagename}|#{format}|#{path}|#{fullpath}|#{query}|#{action_type}|#{call_type}|" + "\r\n"
-
-  File.open(logfilepath,"a") do |file|
-   file << log_txt
-  end
-  
-end
-
+# REMOVE THIS TO A MODULE
 post "/energypush" do
   
   logfilepath = 'public/pages/data/energy.txt'
@@ -139,6 +103,7 @@ get '/favicon.ico' do
 end
 
 # ===========================================================================
+
 get '/register_mikiwiki' do
   erb :register_mikiwiki
 end
@@ -263,6 +228,12 @@ get '/*/edit' do
       puts "CLONING DIRECTORY #{@page.name} FROM #{@original.name}"
       @page.clone_from( @original )
       redirect "/#{@page.name}"
+
+    elsif @original.is_resource?
+      puts "CLONING FILE #{@page.name} FROM  #{@original.name}"
+      @page.clone_from @original
+      redirect "/#{@page.name}"
+      
     else
       puts "CLONING FILE #{@page.name} FROM  #{@original.name}"
       clone = Page.get( params[:clone] )
@@ -745,7 +716,7 @@ __END__
 
     <div class="grid_5">   
      <li><img class='login_icon'  src="/siteImages/code.png"><h4>API for Advanced Users</h4>
-      <p>Nuggets are executable JavaScript, which can be tinkered and tailored. We also provide an API for advanced users to create their own mikinuggets</p>
+      <p>Nuggets are executable JavaScript, which can be tinkered and tailored. We also provide an API for advanced users to create their own nuggets</p>
      </li>
     </div>
  
@@ -812,7 +783,7 @@ __END__
 
       <div class="grid_5">   
        <li><img class='login_icon'  src="/siteImages/code.png"><h4>API for Advanced Users</h4>
-        <p>Nuggets are executable JavaScript, which can be tinkered and tailored. We also provide an API for advanced users to create their own mikinuggets</p>
+        <p>Nuggets are executable JavaScript, which can be tinkered and tailored. We also provide an API for advanced users to create their own nuggets</p>
        </li>
       </div>
 
@@ -1203,6 +1174,3 @@ You don't have the authorization to access this resource
 scope is <%= session.inspect %> <br/><br/><br/>
 current_user is <%= current_user.inspect %> <br/><br/><br/>
 
-
-
-m
