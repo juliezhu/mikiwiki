@@ -224,22 +224,10 @@ get '/*/edit' do
 
     log username(), request, params, @original, 'clone'
     
-    if @original.is_directory?
-      puts "CLONING DIRECTORY #{@page.name} FROM #{@original.name}"
-      @page.clone_from( @original )
-      redirect "/#{@page.name}"
+    puts "CLONING page of type #{@page.pagetype}: MADE #{@page.name} FROM #{@original.name}"
 
-    elsif @original.is_resource?
-      puts "CLONING FILE #{@page.name} FROM  #{@original.name}"
-      @page.clone_from @original
-      redirect "/#{@page.name}"
-      
-    else
-      puts "CLONING FILE #{@page.name} FROM  #{@original.name}"
-      clone = Page.get( params[:clone] )
-      @pagebody = clone.raw(username())
-      @pageformat = clone.format
-    end
+    @page.clone_from( @original )
+    redirect "/#{@page.name}"
     
   elsif params[:rename]
     @original = Page.get( params[:rename] )

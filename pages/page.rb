@@ -36,7 +36,6 @@ require 'services/authentication'
 # @full_metadata_filepath : public/pages/foo/bar.png_metadata.txt
 
 
-
 class Page
 
   @@resources_basedir = 'public'
@@ -386,7 +385,7 @@ public
   ######### ACTIONS ################################################################## 
 
   def rename new_name
-    if self.is_directory?
+    if is_directory?
       new_path = Page.get(new_name).fullname_plus_base
       FileProxy.new(@name, @fullname_plus_base).rename new_path
     else
@@ -404,11 +403,19 @@ public
   end
   
   def clone_from original_page
-    FileUtils.cp_r original_page.fullname_plus_base, self.fullname_plus_base
+
+    puts "original_page.full_filepath #{original_page.full_filepath}"
+    puts "self.full_filepath #{self.full_filepath}"
+    puts "is_directory? #{is_directory?}"
     
-    if not is_directory? # then copy metadata too
+    if original_page.is_directory?
+      FileUtils.cp_r original_page.fullname_plus_base, self.fullname_plus_base
+    else
+      # copy page
+      FileUtils.cp_r original_page.full_filepath, self.full_filepath
+      # copy metadata too
       FileUtils.cp_r original_page.full_metadata_filepath, self.full_metadata_filepath
-    end   
+    end
          
   self end
   
@@ -491,7 +498,7 @@ public
   def delete
     # instead of deleting... historicize
     
-    if self.is_directory?      
+    if is_directory?      
       self.rename sibling("__#{singlename}").name
     else 
       create_history_folder! unless has_history_folder?
@@ -500,7 +507,7 @@ public
   end
 
   def real_delete
-    if self.is_directory?      
+    if is_directory?      
       FileProxy.new(@name, @fullname_plus_base).delete
     else 
       @pagefile.delete
