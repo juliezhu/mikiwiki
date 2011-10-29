@@ -19,24 +19,9 @@ enable :sessions
 $MIKI_LOGGER = Logger.new('data/activity.log', 0, 2 * 1024 * 1024) # roll logs every 2MB
 
 
-# REMOVE THIS TO A MODULE
-post "/energypush" do
-  
-  logfilepath = 'public/pages/data/energy.txt'
-  
-  log_txt = JSON.dump({
-    'Amp' => params['Amp'] ,
-    'Watt' => params['Watt']  
-  })
-      
-   File.open(logfilepath,"w") do |file|
-     file << log_txt
-    end   
-          
-end
-
-
+# 
 # remember if sidebar was open or closed
+# 
 
 get '/close-sidebar' do
   session[:sidebar] = 'closed'
@@ -129,7 +114,6 @@ post '/register_mikiwiki' do
     Page.get("users/private/#{params[:name]}").update 'bo/profile', username(), private_page_txt
 
     redirect '/'
-
 end
 
 # ==========================================================================================
@@ -165,6 +149,8 @@ post '/login' do
 
   redirect '/login'
 end
+
+# ==========================================================================================
 
 get '/search' do
   @page = Page.get('')
@@ -206,9 +192,6 @@ end
 get '/access-denied' do
   erb :accessdenied
 end
-
-# authenticate! filepath, 'read'
-# we need special access for the scripts..
 
 get '/*/delete' do
   @page = authenticate_page params, 'delete'
@@ -271,17 +254,8 @@ post '/*/edit' do
   oldname = @page.name
     
   if params[:title] != @page.name
-    if @page.is_resource?
-      log username(), request, params, @page, 'update_rename'
-      @page.rename params[:title]  
-    else
-      log username(), request, params, @page, 'update_rename'
-      @page.rename params[:title]  
-      
-      # why did i do this stuff here... ?
-      # @page.real_delete if not @page.name == params[:title]
-      # @page = Page.update params[:title], params[:format], username(), params[:body]
-    end
+    log username(), request, params, @page, 'update_rename'
+    @page.rename params[:title]        
     
     redirect "/#{params[:title]}?changed=renamed&oldname=#{oldname}"
   else
@@ -1175,10 +1149,4 @@ You don't have the authorization to access this resource
   });
       
 </script>
-
-
-@@ experiment
-
-scope is <%= session.inspect %> <br/><br/><br/>
-current_user is <%= current_user.inspect %> <br/><br/><br/>
 
