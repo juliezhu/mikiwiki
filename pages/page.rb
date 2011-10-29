@@ -403,11 +403,6 @@ public
   end
   
   def clone_from original_page
-
-    puts "original_page.full_filepath #{original_page.full_filepath}"
-    puts "self.full_filepath #{self.full_filepath}"
-    puts "is_directory? #{is_directory?}"
-    
     if original_page.is_directory?
       FileUtils.cp_r original_page.fullname_plus_base, self.fullname_plus_base
     else
@@ -416,8 +411,17 @@ public
       # copy metadata too
       FileUtils.cp_r original_page.full_metadata_filepath, self.full_metadata_filepath
     end
-         
   self end
+  
+  def name_of_clone
+    if is_resource? 
+      # insert '-clone' before the file extension
+      parts = self.name.split('.')
+      "#{parts[0..-2].join('.')}-clone.#{parts[-1]}"
+    else
+      "#{self.name}-clone"
+    end
+  end
   
   def make_folder!
     File.makedirs self.fullname_plus_base

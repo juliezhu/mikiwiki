@@ -651,7 +651,7 @@ __END__
       <script type="text/javascript">
         $("#form-clone").hide();
 
-        $("#form-clone input").val( "<%= @page ? @page.name : '' %>-clone");
+        $("#form-clone input").val( "<%= @page ? @page.name_of_clone : '' %>");
 
         $('#clone-link').click(function() {
           $("#clone-link").hide();
