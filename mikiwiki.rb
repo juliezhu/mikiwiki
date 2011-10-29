@@ -2,7 +2,7 @@
   require lib
 end
 
-require 'utils'
+require 'utils' # and logger
 require 'pages/page'
 require 'session'
 require 'services/users'
@@ -14,7 +14,9 @@ require 'services/search'
 enable :static
 enable :sessions
 
-$LOGGING = true # for the logger in utils.rb
+# put logger to nil if you don't want to log
+# $MIKI_LOGGER = nil
+$MIKI_LOGGER = Logger.new('data/activity.log', 0, 2 * 1024 * 1024) # roll logs every 2MB
 
 
 # REMOVE THIS TO A MODULE
