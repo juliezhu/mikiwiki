@@ -45,11 +45,17 @@ class Group
   def Group.load filename
     puts "Loading #{filename} .."
     text = File.read filename
-    lines = text.split("\r\n")
+    lines = text.split("\n")
+
     entries = []
     lines.each do |line|
-      entries << Entry.new( line.split('|') )
+      if not line[0].chr == '#' 
+        logger_header, logger_info = line.split(' -- : ')
+        fields = logger_info.split('|')
+        entries << Entry.new( fields )
+      end
     end    
+    
     puts "Parsing #{filename} done."
     
     return Group.new(entries)
@@ -77,6 +83,10 @@ class Group
   
   def modifying_update
     Group.new( @entries.select{|e| e.actiontype == 'update'} )
+  end
+
+  def reading
+    Group.new( @entries.select{|e| e.actiontype == 'read'} )
   end
   
   def code_pages
@@ -121,9 +131,10 @@ class Group
   
   end
 
+
 exit
 
-g = Group.load 'user-logs_summary.txt'
+g = Group.load '../data/activity.log'
 
 # all users
 puts g.users.join ','

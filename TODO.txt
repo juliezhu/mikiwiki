@@ -1,11 +1,10 @@
 Bugs
 
-- put  post "/energypush"  to separate module
-- history nugget: if no history, should alert!!!
 - check allow nugget r+ w+
-- BO folder access permission for admins/metadesigners only
-- history data page doesn't show
+- history nugget: if no history, should alert!!!
 - should be able to embed the pdf without using include
+- history data page doesn't show
+- BO folder access permission for admins/metadesigners only
 - render datapage doesn't work if it has singlequote.. al data is passed as a string in the code!!!
 
 Features

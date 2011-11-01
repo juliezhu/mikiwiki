@@ -58,7 +58,7 @@ Some Syntax
 
 \<\<a_nugget_name: {"this is":"some JSON"}\>\> - passes some configuration information to a nugget as JSON data
 
-\<\<a_nugget_name as a_format\>\> - imports a nugget and ovverides its format
+\<\<a_nugget_name as a_format\>\> - imports a nugget and overrides its format
 
 
 New Users
@@ -78,10 +78,8 @@ load_javascript("https://www.google.com/jsapi?key=INSERT-YOUR-KEY",function(){})
 Bugs
 ====
 
-1) when you create syn-image note, \<\<datapage_name as syn-imagenote\>\>, the data page is automated created yet without any content. You need to manually open it and add curly brackets {} in the data page. Otherwise, you won’t be able to save any data. 
+1) the 'allow' nugget is not fully functional 
 
-2) the 'allow' nugget is not fully functional 
-
-3) you can preview the data page normally, but when the content has an apostrophe, which breaks the view of the data page.
+2) you can preview the data page normally, but when the content has an apostrophe, which breaks the view of the data page.
 
 
