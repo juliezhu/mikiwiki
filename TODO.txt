@@ -1,6 +1,13 @@
 Bugs
 
 - check allow nugget r+ w+
+
+	- dev/Auth is set to <<allow:designer,mike+r>>
+	- developers can access it. eg. jack
+	- designers cannot edit it. eg: john
+	
+- remove system/bo/checkpoint
+- formatting in help sidebar is wrong
 - history nugget: if no history, should alert!!!
 - should be able to embed the pdf without using include
 - history data page doesn't show

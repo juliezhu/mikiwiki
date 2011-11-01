@@ -56,7 +56,7 @@ tag – keywords
  autotranslate:it to specify a certain language to translate (en,fr,de,it,zh,jp..)
  
 *** Authentication
- allow:julie,designer,mike+r,accountant+r - allow access only to some users. +r stands for read-only. 
+ allow:julie,designer,mike+readonly,accountant+readonly - allow access only to some users. 
  allow:all+readonly - only the admin can edit this
    
 *** History

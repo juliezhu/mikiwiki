@@ -39,6 +39,7 @@ class PageAuthenticationMetadata
   
   def can_write? user
     puts ">>> PageAuthenticationMetadata can_write? 1 <<<"
+    return true if user['role'] == 'admin'
     return true if not readwrite_is_set? and not readonlylist_include? user
     return true if     readwrite_is_set? and     readwritelist_include? user
     return false
@@ -46,6 +47,7 @@ class PageAuthenticationMetadata
 
   def can_read? user
     puts ">>> PageAuthenticationMetadata can_read? 1 <<<"
+    return true if user['role'] == 'admin'
     return true if not readwrite_is_set? 
     # THE FOLLOWING ARE NOT EXACTLY CORRECT.. got changed to: return true if not readwrite_is_set?  
     # return true if not readwrite_is_set? and not readonly_is_set?
