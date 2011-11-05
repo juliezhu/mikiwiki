@@ -104,14 +104,14 @@ post '/register_mikiwiki' do
       'role'    => 'user'
     })
 
-    Page.get("users/#{params[:name]}").update 'bo/profile', username(), page_txt
+    Page.get("users/#{params[:name]}").update 'user', username(), page_txt
     
     private_page_txt = JSON.dump({
       'password'     => params[:password], 
       'role'         => 'user'
     })
        
-    Page.get("users/private/#{params[:name]}").update 'bo/profile', username(), private_page_txt
+    Page.get("users/private/#{params[:name]}").update 'user', username(), private_page_txt
 
     redirect '/'
 end
@@ -170,6 +170,26 @@ get '/search' do
   
   erb :directory
 end
+
+get '/search_tag' do
+  @page = Page.get('')
+
+  found = search_tags(params[:keyword])
+
+  log username(), request, params, @page, 'search_tag'
+  
+  @pages = found.map{|a_path| Page.from_path(a_path) }
+  
+  puts "******** directory ***********"
+  @pages.each do |page|
+    puts page.name
+  end
+  
+  @environments = @page.get_environments(username()) || []
+  
+  erb :directory
+end
+
 
 get '/' do
   authenticate! '/', 'read'

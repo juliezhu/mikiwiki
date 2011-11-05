@@ -8,32 +8,39 @@ load_javascript("http://aehlke.github.com/tag-it/js/tag-it.js",function(){
   nugget.out( "<a href='#' id='saveTags'>Save Tags</a> " );
   nugget.setHTML();
   
+  var savetags = function(){
+    var currentTags = [];
+    nugget.$('#myULTags li').each(function(index, tag){
+      var strLen = $(this).text().length;
+      currentTags[index] = $(this).text().slice(0,strLen-1);  
+    });
+    
+    // the last element is a fake li, used for user input. kill it!
+    currentTags.pop();
+    
+    nugget.topPage().saveTags(currentTags,function(){ 
+      alert("saved!"); 
+    });
+    
+  }; // savetags()
+  
   nugget.topPage().loadTags(function(tags){ 
     
     for(i=0; i<tags.length;i++){
       nugget.$('#myULTags').append('<li>'+tags[i]+'</li>');
     }
-
-    $('#myULTags').tagit({
-      availableTags: tagHints
-    }); 
-    
-    var savetags = function(){
-      var currentTags = [];
-      nugget.$('#myULTags li').each(function(index, tag){
-        strLen = $(this).text().length;
-        currentTags[index] = $(this).text().slice(0,strLen-1);;  
-      });
-     
-      // the last element is a fake li, used for user input. kill it!
-      currentTags.pop();
-            
-      nugget.topPage().saveTags(currentTags,function(){ 
-        alert("saved!"); 
-      });
       
-    }; // savetags()
-    
+    nugget.$('#myULTags').tagit({
+      availableTags: tagHints,
+      onTagClicked: function(e,tag){
+        var strLen = $(tag).text().length;
+        var theTag = $(tag).text().slice(0,strLen-1);
+        location.href = "/search_tag?keyword="+theTag;
+      },
+      //onTagAdded: function(){ savetags() },
+      //onTagRemoved: function(){ savetags() }
+    });   
+              
     nugget.$('#saveTags').click(savetags);
     
   }); // load tags

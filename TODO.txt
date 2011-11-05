@@ -1,20 +1,20 @@
 Bugs
-
-- check allow nugget r+ w+
-
-	- dev/Auth is set to <<allow:designer,mike+r>>
-	- developers can access it. eg. jack
-	- designers cannot edit it. eg: john
 	
-- remove system/bo/checkpoint
-- formatting in help sidebar is wrong
+- history data page doesn't show (imagenote preview)
+http://www.mikiwiki.aqalert.net/demos/directory/history-of-pookybooky
+- render datapage doesn't work if it has singlequote.. al data is passed as a string in the code!!!
+http://www.mikiwiki.aqalert.net/demos/Example/data/chat001
 - history nugget: if no history, should alert!!!
 - should be able to embed the pdf without using include
-- history data page doesn't show
-- BO folder access permission for admins/metadesigners only
-- render datapage doesn't work if it has singlequote.. al data is passed as a string in the code!!!
+
 
 Features
 
 - in-place editing
 - navigation page linking, iPad case
+
+
+Tag
+- search exclude private folder
+- search results: displaying within an i-frame
+- movable panels without drag-bar
