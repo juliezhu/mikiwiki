@@ -1,4 +1,3 @@
-
 def search_pages keyword
   path = "public/pages/*"
 

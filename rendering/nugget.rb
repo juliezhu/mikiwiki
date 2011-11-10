@@ -64,6 +64,9 @@ class MikiNugget
   end
   
   def render username
+    
+    encoded_param_data = escape_javascript(@paramstxt)
+    
     div( 
       :class => 'mikinugget', 
       :title => "mikinugget #{@css_id_uniq}", 
@@ -82,13 +85,13 @@ class MikiNugget
                  javascript(
                     %{ executeNugget(
                         '#{username}',
-                        '#{@version}',              //version
-                        '#{@modelpagename}',        //datapage
-                        '#{@formatpagename}',       //formatpage
-                        #{@javascript_function_id}, //function
-                        '##{@css_id_uniq}',         //nugget css id
-                        '#{@paramstxt}',            //embedded data
-                        '#{@modelpage.name}'        //codepage 
+                        '#{@version}',                        //version
+                        '#{@modelpagename}',                  //datapage
+                        '#{@formatpagename}',                 //formatpage
+                        #{@javascript_function_id},           //function
+                        '##{@css_id_uniq}',                   //nugget css id
+                        '#{encoded_param_data}',              //embedded data
+                        '#{@modelpage.name}'                  //codepage 
                        ); 
                     }
                  )
@@ -99,6 +102,17 @@ class MikiNugget
   end
 
 private
+
+  def escape_javascript(javascript)
+    js_escape_map	=	{ '\\' => '\\\\', '</' => '<\/', "\r\n" => '\n', "\n" => '\n', "\r" => '\n', '"' => '\\"', "'" => "\\'" }
+    
+    if javascript
+      result = javascript.gsub(/(\\|<\/|\r\n|[\n\r"'])/) {|match| js_escape_map[match] }
+      javascript.html_safe? ? result.html_safe : result
+    else
+      ''
+    end
+  end
 
   def is_stateless_nugget?
     @formatpagename == 'javascript' or @formatpagename == 'template'

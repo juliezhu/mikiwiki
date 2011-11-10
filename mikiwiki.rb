@@ -356,7 +356,10 @@ post '/*/realtime-synch' do
   puts "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
   puts "REALTIME SYNCH"
   puts params.inspect
-
+  puts "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+  puts @page.raw(username())
+  puts "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"  
+  
   pagedata = JSON.parse( @page.raw(username()) )
   page_timestamp = @page.timestamp
 
@@ -510,12 +513,18 @@ get '/*' do
       log username(), request, params, @page, 'read_no_layout', 'ajax'
 
       if @page.is_content?
-        return @page.raw(username())
+        return @page.render(username())
+        # return @page.raw(username())
       elsif @page.is_code?
         return @page.render_as_code_block(username())
       else # it is a data page
-        # I expected the following to work, but it didn't: return @page.render_data_page_as_content_page(username())
-        return @page.raw(username())
+        # I expected the following to work, but it didn't: 
+        # return @page.render_data_page_as_content_page(username())
+        if params[:datadisplay] == 'y'
+          return @page.render_data_page_as_content_page(username())
+        else
+          return @page.raw(username())
+        end
       end
 
   elsif params[:raw] == 'y'

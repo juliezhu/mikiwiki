@@ -1,1 +1,1 @@
-<div>[[include:demos/Example/test-doodle]]</div><div><br></div><div><br></div><div><br></div>
+<div>[[include:demo/test-doodle]]</div><div><br></div><div><br></div><div><br></div>

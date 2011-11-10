@@ -136,6 +136,7 @@ function Page(pagename){
 		lookupURL: 	   	   function(){ return '/'+this.pagename+'?lookup=y'; },
 		metadataURL: 	   function(){ return '/'+this.pagename+'?metadata=y'; },	
 		noLayoutURL: 	   function(){ return '/'+this.pagename+'?nolayout=y'; },
+		noLayoutURL2: 	   function(){ return '/'+this.pagename+'?nolayout=y&datadisplay=y'; },
 		rawURL: 	   	   function(){ return '/'+this.pagename+'?raw=y'; },
 		editURL: 	 	   function(){ return '/'+this.pagename+'/edit'; },
 		appendsynchURL:    function(){ return '/'+this.pagename+'/append'; },
@@ -178,6 +179,28 @@ function Page(pagename){
 		    });
 		},
 
+		// WHO USES THIS???
+		loadContent2: function(){
+			if ( arguments.length == 2) {
+				var parameters = arguments[0];
+				var successFunc = arguments[1];
+			}else if (arguments.length == 1){
+				var parameters = {};
+				var successFunc = arguments[0];
+			}else if (arguments.length == 0){
+				var parameters = {};
+				var successFunc = function(){};
+			}
+
+			parameters['currentpagename'] = currentPageName();
+
+		    $.ajax({
+		      url: this.noLayoutURL2(),
+			  data: parameters,
+		      success: successFunc
+		    });
+		},
+
 		loadRaw: function(){
 			if ( arguments.length == 2) {
 				var parameters = arguments[0];
@@ -196,7 +219,8 @@ function Page(pagename){
 		      success: successFunc
 		    });
 		},
-
+		
+		// used only in mikiwiki.js
 		load: function(){
 			if ( arguments.length == 2) {
 				var parameters = arguments[0];

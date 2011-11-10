@@ -1,2 +1,5 @@
 * Home <hr>
 [[expand:bo/_help]]&nbsp;
+<script>
+	// $("li a:contains('environment')").parent().hide();
+</script>

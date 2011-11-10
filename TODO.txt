@@ -1,11 +1,26 @@
+
+
 Bugs
+
+-  include a picture is broken with the new load.content() function...
+- you can't change the name and the code at the same time, you can only change either of it...
+- if nugget does not exist, using it will get error
+- change allow-permission, still get denied
 	
 - history data page doesn't show (imagenote preview)
 http://www.mikiwiki.aqalert.net/demos/directory/history-of-pookybooky
 - render datapage doesn't work if it has singlequote.. al data is passed as a string in the code!!!
 http://www.mikiwiki.aqalert.net/demos/Example/data/chat001
+
+http://localhost:4567/local/directory/history-of-chat
+click preview and it dooesn't work.. on the serverside it loads the outer page html instead of the data...
+
+- bo/_help doesnt display properly when inside an expand
+- when renaming/cloning a page, missing path directories are not autocreated anymore
 - history nugget: if no history, should alert!!!
 - should be able to embed the pdf without using include
+- search should exclude /users folder
+
 
 
 Features
@@ -14,7 +29,86 @@ Features
 - navigation page linking, iPad case
 
 
-Tag
-- search exclude private folder
-- search results: displaying within an i-frame
-- movable panels without drag-bar
+==============
+
+get '/*' do
+  @page = authenticate_page params, 'read'
+    
+  if params[:lookup] == 'y'
+    return @page.name
+  end
+
+  puts "*** PAGE LOAD REQUEST FOR #{@page.name}"
+  
+  if @page.is_directory?
+    log username(), request, params, @page, 'read'
+    
+    @pages = @page.all_firstlevel 
+    
+    puts "******** directory ***********"
+    @pages.each do |page|
+      puts page.name
+    end
+    
+    @environments = @page.get_environments(username()) || []
+    
+    erb :directory
+    
+  elsif @page.is_new?
+    log username(), request, params, @page, 'want_to_create'
+    
+    if params[:nolayout] == 'y' # we are handling an ajax call here
+      return %{<a class='uncreated' title='click to create the missing page to include' href='/#{@page.name}'>#{@page.name}</a>}
+    elsif params[:makefolder] == 'y'
+      @page.make_folder!
+      redirect "/#{@page.name}"
+    else
+      redirect "/#{@page.name}/edit"
+    end
+    
+  elsif params[:metadata] == 'y'
+      return @page.metadata_as_json
+
+  elsif params[:nolayout] == 'y'
+      log username(), request, params, @page, 'read_no_layout', 'ajax'
+      return @page.render(username())
+
+  elsif params[:raw] == 'y'
+      log username(), request, params, @page, 'read_no_layout_raw', 'ajax'
+      return @page.raw(username())
+
+  ##### this should be called only by js call Page(..).renderTo(...) 
+  elsif params[:embedded] == 'y'
+    log username(), request, params, @page, 'read_embedded', 'ajax'
+    return @page.render(username()) if @page.is_content?
+    return @page.render_as_code_block(username()) if @page.is_code?
+    #return @page.render_data_page_as_content_page   # it is a data page
+    return @page.render_data_page_in_embedded_form(  username() ) # it is a data page
+
+  else # just a normal page
+      log username(), request, params, @page, 'read'
+
+      if @page.is_content?
+        @pagecontent = @page.render(username())
+        
+      elsif @page.is_code?
+        @pagecontent = "<em>*** CODE OF BEHAVIOR USING FORMAT #{@page.format} ***</em>" + "<br/><br/>"
+        @pagecontent += @page.render_as_code_block(username())
+        
+      else # it is a data page
+        @pagecontent = "<em>*** PREVIEW OF DATA USING FORMAT <a class='formatlink' href='/#{@page.format}'>/#{@page.format}</a> ***</em>" + "<br/><br/>"
+        @pagecontent += @page.render_data_page_as_content_page(username())
+        @pagecontent += "<br/><br/><hr/><br/><br/>"
+        @pagecontent += "<em>*** RAW DATA ***</em>" + "<br/><br/>"
+        @pagecontent += @page.render(username())
+        
+      end
+
+      @environments = @page.get_environments(username()) || []
+      
+      erb :page
+  end
+    
+end
+
+__END__

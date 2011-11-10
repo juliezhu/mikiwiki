@@ -12,8 +12,8 @@ if (parts.length == 1) {
 }
 
 function render_page(pagename,selector){
-  //Page(pagename).renderTo('#snapshot');
-  Page(pagename).loadContent(function(loadedpage_html){
+  Page(pagename).loadContent2(function(loadedpage_html){
+    alert( loadedpage_html );
     nugget.$('#snapshot').html(loadedpage_html);
   });
 }
@@ -44,7 +44,6 @@ Page(folder_info).subpages(function(pages){
         nugget.out(" ... "+pages[i].info.format);    
       }
       
-//      nugget.out(" <<profile:"+pages[i].info.user+">> updated it on "+pages[i].info.update);
       nugget.out(" - <a href='/users/"+pages[i].info.user+"'>"+pages[i].info.user+"</a> <em>"+pages[i].info.update+"</em>");
     }
     
